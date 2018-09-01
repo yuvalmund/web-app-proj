@@ -192,7 +192,7 @@ namespace RentAHouse.Data.Migrations
 
                     b.Property<int>("BuildingTax");
 
-                    b.Property<DateTime>("MyProperty");
+                    b.Property<DateTime>("EnterDate");
 
                     b.Property<bool>("arePetsAllowed");
 

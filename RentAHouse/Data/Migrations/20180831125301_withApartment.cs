@@ -63,7 +63,7 @@ namespace RentAHouse.Data.Migrations
                     isRenovatetd = table.Column<bool>(nullable: false),
                     arePetsAllowed = table.Column<bool>(nullable: false),
                     isThereElivator = table.Column<bool>(nullable: false),
-                    MyProperty = table.Column<DateTime>(nullable: false),
+                    EnterDate = table.Column<DateTime>(nullable: false),
                     floor = table.Column<int>(nullable: false)
                 },
                 constraints: table =>

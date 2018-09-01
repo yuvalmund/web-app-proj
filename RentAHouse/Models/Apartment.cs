@@ -24,7 +24,7 @@ namespace RentAHouse.Models
         public bool isRenovatetd { get; set; }
         public bool arePetsAllowed { get; set; }
         public bool isThereElivator { get; set; }
-        public DateTime EnsterDate { get; set; }
+        public DateTime EnterDate { get; set; }
         public int floor { get; set; }
         public virtual ApartmentImage[] images { get; set; }
 
