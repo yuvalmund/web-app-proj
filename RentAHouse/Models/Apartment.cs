@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -15,6 +16,8 @@ namespace RentAHouse.Models
         public int roomsNumber { get; set; }
         public int size { get; set; }
         public int price { get; set; }
+
+        [DisplayName("City tax")]
         public int cityTax { get; set; }
         public int BuildingTax { get; set; }
         public bool furnitureInculded { get; set; }
