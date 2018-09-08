@@ -9,7 +9,12 @@
 
 <script>
     function onRegionSelected(region) {
-        //$.ajax
+        $.post('/Apartments/Index', { region: region }, function (data, status) {
+            debugger;
+           // $("#form").hide();
+            var t = $("#selectCity");
+           // $('#changer').html(data);
+        });
     }
  </script>
 <form>
@@ -19,7 +24,7 @@
     </div>
     <div class="form-group">
         <label for="City">Which City?</label>
-        <select asp-items="ViewBag.Cities" class="form-control"></select>
+        <select id="selectCity" asp-items="ViewBag.Cities" class="form-control"></select>
     </div>
     <div class="form-group">
         <label for="RoomNumber">How many rooms?</label>

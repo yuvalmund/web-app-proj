@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +6,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RentAHouse.Data;
 using RentAHouse.Models;
+using Newtonsoft.Json;
+using System;
 
 namespace RentAHouse.Controllers
 {
@@ -29,21 +30,33 @@ namespace RentAHouse.Controllers
         }
 
 
-        [HttpGet]
-        public async Task<IActionResult> Index(int region)
+        [HttpPost]
+        public async Task<string> Index(int region)
         {
-            var citiesList = new MultiSelectList(null);
+            List<City> n;
             if (region == (int)District.All)
             {
-                citiesList = new MultiSelectList(_context.City.Select(i => i), "ID", "cityName");
+                n = _context.City.ToList();
             }
             else
             {
-                citiesList = new MultiSelectList(_context.City.Select(i => i.region == (District)region), "ID", "cityName");
+                try
+                {
+                    n = _context.City.Where(i => i.region == (District)region).ToList();
+                }
+                catch (Exception ex)
+                {
+                    int i = 10;
+                }
+                finally
+                {
+                    n = _context.City.ToList();
+                }
             }
-            ViewBag.Cities = citiesList;
 
-            return View(await _context.Apartment.ToListAsync());
+            var json = JsonConvert.SerializeObject(n);
+
+            return json;
         }
 
         // GET: Apartments/Details/5
