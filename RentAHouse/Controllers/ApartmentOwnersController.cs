@@ -52,17 +52,40 @@ namespace RentAHouse.Controllers
         // POST: ApartmentOwners/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<string> Create([Bind("ID,userName,password,firstName,lastName,mail,rate")] ApartmentOwner apartmentOwner)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        apartmentOwner.rate = 0;
+        //        _context.Add(apartmentOwner);
+        //        await _context.SaveChangesAsync();
+        //        //return RedirectToAction(nameof(Index));
+        //    }
+
+        //    return "Done!";
+        //}
+
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,userName,password,firstName,lastName,mail,rate")] ApartmentOwner apartmentOwner)
+        public async Task<string> Create(string userName, string password, string firstName,string lastName,string mail)
         {
+            ApartmentOwner apartmentOwner = new ApartmentOwner();
+            apartmentOwner.userName = userName;
+            apartmentOwner.password = password;
+            apartmentOwner.firstName = firstName;
+            apartmentOwner.lastName = lastName;
+            apartmentOwner.mail = mail;
+
             if (ModelState.IsValid)
             {
+                apartmentOwner.rate = 0;
                 _context.Add(apartmentOwner);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                //return RedirectToAction(nameof(Index));
             }
-            return View(apartmentOwner);
+
+            return "Done!";
         }
 
         // GET: ApartmentOwners/Edit/5
