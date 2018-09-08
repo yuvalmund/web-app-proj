@@ -22,6 +22,27 @@ namespace RentAHouse.Controllers
         // GET: Apartments
         public async Task<IActionResult> Index()
         {
+            var citiesList = new MultiSelectList(_context.City.Select(i => i), "ID", "cityName");
+            ViewBag.Cities = citiesList;
+
+            return View(await _context.Apartment.ToListAsync());
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> Index(int region)
+        {
+            var citiesList = new MultiSelectList(null);
+            if (region == (int)District.All)
+            {
+                citiesList = new MultiSelectList(_context.City.Select(i => i), "ID", "cityName");
+            }
+            else
+            {
+                citiesList = new MultiSelectList(_context.City.Select(i => i.region == (District)region), "ID", "cityName");
+            }
+            ViewBag.Cities = citiesList;
+
             return View(await _context.Apartment.ToListAsync());
         }
 
@@ -148,6 +169,20 @@ namespace RentAHouse.Controllers
         private bool ApartmentExists(int id)
         {
             return _context.Apartment.Any(e => e.ID == id);
+        }
+
+        public void onRegionSelected(int region)
+        {
+            var citiesList = new MultiSelectList(null);
+            if (region == (int)District.All)
+            {
+                citiesList = new MultiSelectList(_context.City.Select(i => i), "ID", "cityName");
+            }
+            else
+            {
+                citiesList = new MultiSelectList(_context.City.Select(i => i.region == (District)region), "ID", "cityName");
+            }
+            ViewBag.Cities = citiesList; 
         }
     }
 }

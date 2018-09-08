@@ -1,107 +1,143 @@
 ﻿@model IEnumerable<RentAHouse.Models.Apartment>
+@using RentAHouse.Models;
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h2>Index</h2>
+<h2>Search for your next house</h2>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.street)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.houseNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.roomsNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.size)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.cityTax)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BuildingTax)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.furnitureInculded)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.isRenovatetd)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.arePetsAllowed)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.isThereElivator)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EnterDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.floor)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.street)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.houseNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.roomsNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.size)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.cityTax)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BuildingTax)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.furnitureInculded)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.isRenovatetd)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.arePetsAllowed)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.isThereElivator)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EnterDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.floor)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<script>
+    function onRegionSelected(region) {
+        //$.ajax
+    }
+ </script>
+<form>
+    <div class="form-group">
+        <label for="Region">Which Region?</label>
+        <select asp-items="@Html.GetEnumSelectList<District>()" onchange="onRegionSelected(this.value)" class="form-control"></select>    
+    </div>
+    <div class="form-group">
+        <label for="City">Which City?</label>
+        <select asp-items="ViewBag.Cities" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label for="RoomNumber">How many rooms?</label>
+        <select class="form-control" id="roomNum">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="minPrice">Minimum price</label>
+        <input type="text" class="form-control" id="minPrice">
+    </div>
+    <div class="form-group">
+        <label for="maxPrice">Maximum price</label>
+        <input type="text" class="form-control" id="maxPrice">
+    </div>
+</form>
+
+@*<p>
+        <a asp-action="Create">Create New</a>
+    </p>*@
+
+@*<table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.street)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.houseNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.roomsNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.size)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.price)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.cityTax)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BuildingTax)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.furnitureInculded)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.isRenovatetd)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.arePetsAllowed)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.isThereElivator)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EnterDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.floor)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.street)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.houseNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.roomsNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.size)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.cityTax)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BuildingTax)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.furnitureInculded)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.isRenovatetd)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.arePetsAllowed)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.isThereElivator)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EnterDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.floor)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>*@
