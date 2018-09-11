@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace RentAHouse.Migrations
+namespace RentAHouse.Data.Migrations
 {
-    public partial class @try : Migration
+    public partial class afterronischanges : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
