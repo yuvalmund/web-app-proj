@@ -12,6 +12,8 @@ using Microsoft.EntityFrameworkCore;
 using RentAHouse.Data;
 using RentAHouse.Models;
 using System.Web;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace RentAHouse.Controllers
 {
@@ -63,11 +65,15 @@ namespace RentAHouse.Controllers
         {
             if (ModelState.IsValid)
             {
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                List<ApartmentOwner> Owner = _context.ApartmentOwner.Where(i => i.Id == userId).ToList();
+                apartment.owner = Owner[0];
                 _context.Add(apartment);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                //return RedirectToAction(nameof(Index));
             }
-            return View(apartment);
+            return View("~/Views/Home/Index.cshtml");
         }
 
         // GET: Apartments/Edit/5

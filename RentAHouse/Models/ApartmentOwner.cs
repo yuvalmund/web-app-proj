@@ -14,6 +14,6 @@ namespace RentAHouse.Models
         [DisplayName("Last name")]
         public string lastName { get; set; }
         public int rate { get; set; }
-        public virtual Apartment[] apartments { get; set; }
+        public virtual List<Apartment> apartments { get; set; }
     }
 }
