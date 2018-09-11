@@ -20,6 +20,6 @@ namespace RentAHouse.Models
         [DisplayName("Mail")]
         public string mail { get; set; }
         public int rate { get; set; }
-        public virtual Apartment[] apartments { get; set; }
+        public virtual List<Apartment> apartments { get; set; }
     }
 }

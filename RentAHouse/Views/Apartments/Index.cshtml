@@ -10,11 +10,48 @@
 <script>
     function onRegionSelected(region) {
         $.post('/Apartments/Index', { region: region }, function (data, status) {
-            debugger;
-           // $("#form").hide();
-            var t = $("#selectCity");
-           // $('#changer').html(data);
+            var cityArray = JSON.parse(data);
+
+            $("#selectCity").empty();
+
+            var sel = $("#selectCity");
+            cityArray.forEach(function (city) {
+                sel.append($("<option>").attr('value', city.ID).text(city.cityName));
+            });
         });
+    }
+
+    function onSearch() {
+        $.get('/Apartments/GetApartments', function (data) {
+            debugger;
+            var t = 0;
+
+            var minPrice = $("#minPrice");
+            var maxPrice = $("#maxPrice");
+            var roomNum = $("#roomNum");
+            var city = $("#selectCity");
+
+            //model.filter(function (apartment) {
+            //    return apartment.city == city
+            //})
+
+            model.sort(function (a, b) {
+                return a.price - b.price;
+            });
+
+            $("apartmentsTable").empty();
+            var table = $("#apartmentsTable");
+
+            model.forEach(function (apartment) {
+                var street = apartment.street;
+
+
+                var markup = "<tr><td>" + street + "</td></tr>";
+
+                $("#tableBody").append(markup);
+            });
+        });
+
     }
  </script>
 <form>
@@ -44,20 +81,14 @@
         <label for="maxPrice">Maximum price</label>
         <input type="text" class="form-control" id="maxPrice">
     </div>
+    <input type="button" class="btn btn-success btn-lg" onclick="onSearch()" value="Search"/>
 </form>
 
-@*<p>
-        <a asp-action="Create">Create New</a>
-    </p>*@
-
-@*<table class="table">
+<table id="apartmentsTable" class="table">
         <thead>
             <tr>
                 <th>
                     @Html.DisplayNameFor(model => model.street)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.houseNumber)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.roomsNumber)
@@ -95,54 +126,5 @@
                 <th></th>
             </tr>
         </thead>
-        <tbody>
-    @foreach (var item in Model) {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.street)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.houseNumber)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.roomsNumber)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.size)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.price)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.cityTax)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.BuildingTax)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.furnitureInculded)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.isRenovatetd)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.arePetsAllowed)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.isThereElivator)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.EnterDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.floor)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-                </td>
-            </tr>
-    }
-        </tbody>
-    </table>*@
+        <tbody id="tableBody"></tbody>
+    </table>

@@ -40,23 +40,45 @@ namespace RentAHouse.Controllers
             }
             else
             {
-                try
-                {
-                    n = _context.City.Where(i => i.region == (District)region).ToList();
-                }
-                catch (Exception ex)
-                {
-                    int i = 10;
-                }
-                finally
-                {
-                    n = _context.City.ToList();
-                }
+                District dis = (District)region;
+                n = _context.City.Where(i => i.region == dis).ToList();
             }
 
             var json = JsonConvert.SerializeObject(n);
 
             return json;
+        }
+
+        [HttpGet]
+        public string GetApartments() {
+            var query = from 
+
+            var queryApartments =
+                from currCity in _context.City
+                join currApartment in _context.Apartment on currCity equals currApartment.city
+                join currOwner in ApartmentOwners on currApartment.owner.ID equals currOwner.ID
+                select new
+                {
+                    currOwner.firstName,
+                    currOwner.lastName,
+                    currOwner.mail,
+                    currOwner.rate,
+                    currApartment.ID,
+                    currApartment.street,
+                    currApartment.houseNumber,
+                    currApartment.roomsNumber,
+                    currApartment.size,
+                    currApartment.price,
+                    currApartment.cityTax,
+                    currApartment.BuildingTax,
+                    currApartment.furnitureInculded,
+                    currApartment.isRenovatetd,
+                    currApartment.arePetsAllowed,
+                    currApartment.isThereElivator,
+                    currApartment.floor,
+                    currCity.cityName
+                };
+            return JsonConvert.SerializeObject(queryApartments.ToList());
         }
 
         // GET: Apartments/Details/5
