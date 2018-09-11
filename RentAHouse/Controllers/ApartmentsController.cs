@@ -51,18 +51,18 @@ namespace RentAHouse.Controllers
         }
 
         [HttpGet]
-        public string GetApartments() {
-            var query = from 
+        public string GetApartments(int cityId, int roomNumber, int minPrice, int maxPrice) {
 
             var queryApartments =
                 from currCity in _context.City
-                join currApartment in _context.Apartment on currCity equals currApartment.city
-                join currOwner in ApartmentOwners on currApartment.owner.ID equals currOwner.ID
+                where cityId == currCity.ID
+                join currApartment in _context.Apartment on currCity.ID equals currApartment.city.ID
+                join currOwner in _context.ApartmentOwner on currApartment.owner equals currOwner
                 select new
                 {
                     currOwner.firstName,
                     currOwner.lastName,
-                    currOwner.mail,
+                    currOwner.Email,
                     currOwner.rate,
                     currApartment.ID,
                     currApartment.street,
@@ -77,8 +77,23 @@ namespace RentAHouse.Controllers
                     currApartment.arePetsAllowed,
                     currApartment.isThereElivator,
                     currApartment.floor,
-                    currCity.cityName
+                    currCity.cityName,
+                    currCity.region
                 };
+
+            if (roomNumber != -1)
+            {
+                queryApartments = queryApartments.Where(p => p.roomsNumber == roomNumber);
+            }
+            if (minPrice != -1)
+            {
+                queryApartments = queryApartments.Where(p => p.price >= minPrice);
+            }
+            if (maxPrice != -1)
+            {
+                queryApartments = queryApartments.Where(p => p.price <= maxPrice);
+            }
+
             return JsonConvert.SerializeObject(queryApartments.ToList());
         }
 

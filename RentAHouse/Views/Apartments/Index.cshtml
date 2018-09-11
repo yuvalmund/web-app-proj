@@ -8,6 +8,25 @@
 <h2>Search for your next house</h2>
 
 <script>
+
+    // TODO - add View button for every row
+    function tableBuilder(street, number, cityname, rooms, size, price,
+        propertyTax, buildingTax, furnitures, renovatetd, pets, elevator, floor) {
+        
+        var tb = "<tr>" +
+            "<td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td>" +
+            "<td>{5}</td><td>{6}</td><td>{7}</td><td>{8}</td><td>{9}</td>" +
+            "<td>{10}</td><td>{11}</td><td>{12}</td>" +
+            "</tr>";
+        return tb.format([street, number, cityname, rooms, size, price,
+            propertyTax, buildingTax,
+            furnitures ? "&#10003" : "&#10007",
+            renovatetd ? "&#10003" : "&#10007",
+            pets ? "&#10003" : "&#10007",
+            elevator ? "&#10003" : "&#10007", floor])
+    }
+
+
     function onRegionSelected(region) {
         $.post('/Apartments/Index', { region: region }, function (data, status) {
             var cityArray = JSON.parse(data);
@@ -22,37 +41,70 @@
     }
 
     function onSearch() {
-        $.get('/Apartments/GetApartments', function (data) {
-            debugger;
-            var t = 0;
+        $.ajax({
+            url: '/Apartments/GetApartments',
+            data: {
+                "cityId": $("#selectCity").val(),
+               // "roomNumber": $("#roomNum").val() || -1,
+                "roomNumber": 4,
+                "minPrice": $("#minPrice").val() || -1,
+                "maxPrice": $("#maxPrice").val() || -1
+            },
+            type: "GET",
+            success: function (response) {
+                response = JSON.parse(response);
 
-            var minPrice = $("#minPrice");
-            var maxPrice = $("#maxPrice");
-            var roomNum = $("#roomNum");
-            var city = $("#selectCity");
+                // Sort by price
+                response.sort(function (a, b) {
+                    return a.price - b.price;
+                });
 
-            //model.filter(function (apartment) {
-            //    return apartment.city == city
-            //})
+                $("#tableBody").empty();
 
-            model.sort(function (a, b) {
-                return a.price - b.price;
+                response.forEach(function (apartment) {
+                    //TODO - add all wanted parameters
+                    $("#tableBody").append(tableBuilder(apartment.street,
+                        apartment.houseNumber,
+                        apartment.cityName,
+                        apartment.roomsNumber,
+                        apartment.size,
+                        apartment.price,
+                        apartment.cityTax,
+                        apartment.BuildingTax,
+                        apartment.furnitureInculded,
+                        apartment.isRenovatetd,
+                        apartment.arePetsAllowed,
+                        apartment.isThereElivator,
+                        apartment.floor
+                        ));
             });
-
-            $("apartmentsTable").empty();
-            var table = $("#apartmentsTable");
-
-            model.forEach(function (apartment) {
-                var street = apartment.street;
-
-
-                var markup = "<tr><td>" + street + "</td></tr>";
-
-                $("#tableBody").append(markup);
-            });
+            },
+            error: function (xhr) {
+                //TODO - needed?
+            }
         });
-
     }
+
+
+    // Makes life easier for tableBuilder function
+    String.prototype.format = function (args) {
+        var str = this;
+        return str.replace(String.prototype.format.regex, function (item) {
+            var intVal = parseInt(item.substring(1, item.length - 1));
+            var replace;
+            if (intVal >= 0) {
+                replace = args[intVal];
+            } else if (intVal === -1) {
+                replace = "{";
+            } else if (intVal === -2) {
+                replace = "}";
+            } else {
+                replace = "";
+            }
+            return replace;
+        });
+    };
+    String.prototype.format.regex = new RegExp("{-?[0-9]+}", "g");
  </script>
 <form>
     <div class="form-group">
@@ -88,42 +140,47 @@
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.street)
+                    Street
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.roomsNumber)
+                    Nº
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.size)
+                    City
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.price)
+                    Rooms
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.cityTax)
+                    Size
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.BuildingTax)
+                    Price
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.furnitureInculded)
+                    Poperty Tax
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.isRenovatetd)
+                    Building Tax
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.arePetsAllowed)
+                    Furnitures
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.isThereElivator)
+                    Renovatetd
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.EnterDate)
+                    Pets
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.floor)
+                    Elivator
                 </th>
-                <th></th>
+                @*<th>
+                    Enter Date
+                </th>*@
+                <th>
+                    Floor
+                </th>
             </tr>
         </thead>
         <tbody id="tableBody"></tbody>
