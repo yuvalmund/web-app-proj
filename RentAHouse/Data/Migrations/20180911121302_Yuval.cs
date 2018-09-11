@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace RentAHouse.Data.Migrations
+namespace RentAHouse.Migrations
 {
-    public partial class num2 : Migration
+    public partial class Yuval : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

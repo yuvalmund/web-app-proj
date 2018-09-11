@@ -73,6 +73,7 @@ namespace RentAHouse.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = new Models.ApartmentOwner { UserName = Input.userName, Email = Input.Email };
+                
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 
                 if (result.Succeeded)
@@ -88,6 +89,8 @@ namespace RentAHouse.Areas.Identity.Pages.Account
                         pageHandler: null,
                         values: new { userId = user.Id, code = code },
                         protocol: Request.Scheme);
+                    
+                    
 
                     await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
