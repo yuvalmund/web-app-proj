@@ -78,7 +78,7 @@ namespace RentAHouse.Controllers
         }
 
         [HttpPost]
-        public async Task<string> GetApartments()
+        public async Task<string> GetApartmentsByOwner()
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
 

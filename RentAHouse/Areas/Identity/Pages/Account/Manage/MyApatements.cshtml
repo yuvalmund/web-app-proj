@@ -8,7 +8,7 @@
 <script>
     $( document ).ready(function() {
         $.ajax({
-            url: "/../../../Apartments/GetApartments",
+            url: "/../../../Apartments/GetApartmentsByOwner",
             method: "POST",
         }).done(function () {
             $(this).addClass("done");
