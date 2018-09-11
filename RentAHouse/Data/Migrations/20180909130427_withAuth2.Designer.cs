@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RentAHouse.Data;
 
 namespace RentAHouse.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180909130427_withAuth2")]
+    partial class withAuth2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -195,6 +197,8 @@ namespace RentAHouse.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("ApartmentOwnerId");
+
                     b.Property<int>("BuildingTax");
 
                     b.Property<DateTime>("EnterDate");
@@ -215,8 +219,6 @@ namespace RentAHouse.Data.Migrations
 
                     b.Property<bool>("isThereElivator");
 
-                    b.Property<string>("ownerId");
-
                     b.Property<int>("price");
 
                     b.Property<int>("roomsNumber");
@@ -227,9 +229,9 @@ namespace RentAHouse.Data.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("cityID");
+                    b.HasIndex("ApartmentOwnerId");
 
-                    b.HasIndex("ownerId");
+                    b.HasIndex("cityID");
 
                     b.ToTable("Apartment");
                 });
@@ -353,13 +355,13 @@ namespace RentAHouse.Data.Migrations
 
             modelBuilder.Entity("RentAHouse.Models.Apartment", b =>
                 {
+                    b.HasOne("RentAHouse.Models.ApartmentOwner")
+                        .WithMany("apartments")
+                        .HasForeignKey("ApartmentOwnerId");
+
                     b.HasOne("RentAHouse.Models.City", "city")
                         .WithMany()
                         .HasForeignKey("cityID");
-
-                    b.HasOne("RentAHouse.Models.ApartmentOwner", "owner")
-                        .WithMany("apartments")
-                        .HasForeignKey("ownerId");
                 });
 
             modelBuilder.Entity("RentAHouse.Models.ApartmentImage", b =>

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RentAHouse.Data;
 
 namespace RentAHouse.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180909132315_withAuth7")]
+    partial class withAuth7
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,9 +75,6 @@ namespace RentAHouse.Data.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired();
-
                     b.Property<string>("Email")
                         .HasMaxLength(256);
 
@@ -115,8 +114,6 @@ namespace RentAHouse.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -215,7 +212,7 @@ namespace RentAHouse.Data.Migrations
 
                     b.Property<bool>("isThereElivator");
 
-                    b.Property<string>("ownerId");
+                    b.Property<int?>("ownerID");
 
                     b.Property<int>("price");
 
@@ -229,7 +226,7 @@ namespace RentAHouse.Data.Migrations
 
                     b.HasIndex("cityID");
 
-                    b.HasIndex("ownerId");
+                    b.HasIndex("ownerID");
 
                     b.ToTable("Apartment");
                 });
@@ -249,6 +246,23 @@ namespace RentAHouse.Data.Migrations
                     b.HasIndex("apartmentID");
 
                     b.ToTable("ApartmentImage");
+                });
+
+            modelBuilder.Entity("RentAHouse.Models.ApartmentOwner", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("firstName");
+
+                    b.Property<string>("lastName");
+
+                    b.Property<int>("rate");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("ApartmentOwner");
                 });
 
             modelBuilder.Entity("RentAHouse.Models.ApartmentViews", b =>
@@ -289,21 +303,6 @@ namespace RentAHouse.Data.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("City");
-                });
-
-            modelBuilder.Entity("RentAHouse.Models.ApartmentOwner", b =>
-                {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
-
-                    b.Property<string>("firstName");
-
-                    b.Property<string>("lastName");
-
-                    b.Property<int>("rate");
-
-                    b.ToTable("ApartmentOwner");
-
-                    b.HasDiscriminator().HasValue("ApartmentOwner");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -359,7 +358,7 @@ namespace RentAHouse.Data.Migrations
 
                     b.HasOne("RentAHouse.Models.ApartmentOwner", "owner")
                         .WithMany("apartments")
-                        .HasForeignKey("ownerId");
+                        .HasForeignKey("ownerID");
                 });
 
             modelBuilder.Entity("RentAHouse.Models.ApartmentImage", b =>
