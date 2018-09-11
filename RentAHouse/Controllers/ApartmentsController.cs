@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -11,6 +10,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RentAHouse.Data;
 using RentAHouse.Models;
+using Newtonsoft.Json;
+using System;
 using System.Web;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
@@ -29,7 +30,77 @@ namespace RentAHouse.Controllers
         // GET: Apartments
         public async Task<IActionResult> Index()
         {
+            var citiesList = new MultiSelectList(_context.City.Select(i => i), "ID", "cityName");
+            ViewBag.Cities = citiesList;
+
             return View(await _context.Apartment.ToListAsync());
+        }
+
+
+        [HttpPost]
+        public async Task<string> Index(int region)
+        {
+            List<City> n;
+            if (region == (int)District.All)
+            {
+                n = _context.City.ToList();
+            }
+            else
+            {
+                District dis = (District)region;
+                n = _context.City.Where(i => i.region == dis).ToList();
+            }
+
+            var json = JsonConvert.SerializeObject(n);
+
+            return json;
+        }
+
+        [HttpGet]
+        public string GetApartments(int cityId, int roomNumber, int minPrice, int maxPrice) {
+
+            var queryApartments =
+                from currCity in _context.City
+                where cityId == currCity.ID
+                join currApartment in _context.Apartment on currCity.ID equals currApartment.city.ID
+                join currOwner in _context.ApartmentOwner on currApartment.owner equals currOwner
+                select new
+                {
+                    currOwner.firstName,
+                    currOwner.lastName,
+                    currOwner.Email,
+                    currOwner.rate,
+                    currApartment.ID,
+                    currApartment.street,
+                    currApartment.houseNumber,
+                    currApartment.roomsNumber,
+                    currApartment.size,
+                    currApartment.price,
+                    currApartment.cityTax,
+                    currApartment.BuildingTax,
+                    currApartment.furnitureInculded,
+                    currApartment.isRenovatetd,
+                    currApartment.arePetsAllowed,
+                    currApartment.isThereElivator,
+                    currApartment.floor,
+                    currCity.cityName,
+                    currCity.region
+                };
+
+            if (roomNumber != -1)
+            {
+                queryApartments = queryApartments.Where(p => p.roomsNumber == roomNumber);
+            }
+            if (minPrice != -1)
+            {
+                queryApartments = queryApartments.Where(p => p.price >= minPrice);
+            }
+            if (maxPrice != -1)
+            {
+                queryApartments = queryApartments.Where(p => p.price <= maxPrice);
+            }
+
+            return JsonConvert.SerializeObject(queryApartments.ToList());
         }
 
         // GET: Apartments/Details/5
@@ -159,6 +230,20 @@ namespace RentAHouse.Controllers
         private bool ApartmentExists(int id)
         {
             return _context.Apartment.Any(e => e.ID == id);
+        }
+
+        public void onRegionSelected(int region)
+        {
+            var citiesList = new MultiSelectList(null);
+            if (region == (int)District.All)
+            {
+                citiesList = new MultiSelectList(_context.City.Select(i => i), "ID", "cityName");
+            }
+            else
+            {
+                citiesList = new MultiSelectList(_context.City.Select(i => i.region == (District)region), "ID", "cityName");
+            }
+            ViewBag.Cities = citiesList; 
         }
     }
 }

@@ -1,107 +1,187 @@
 ﻿@model IEnumerable<RentAHouse.Models.Apartment>
+@using RentAHouse.Models;
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h2>Index</h2>
+<h2>Search for your next house</h2>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.street)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.houseNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.roomsNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.size)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.cityTax)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BuildingTax)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.furnitureInculded)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.isRenovatetd)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.arePetsAllowed)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.isThereElivator)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EnterDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.floor)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.street)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.houseNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.roomsNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.size)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.cityTax)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BuildingTax)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.furnitureInculded)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.isRenovatetd)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.arePetsAllowed)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.isThereElivator)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EnterDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.floor)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<script>
+
+    // TODO - add View button for every row
+    function tableBuilder(street, number, cityname, rooms, size, price,
+        propertyTax, buildingTax, furnitures, renovatetd, pets, elevator, floor) {
+        
+        var tb = "<tr>" +
+            "<td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td>" +
+            "<td>{5}</td><td>{6}</td><td>{7}</td><td>{8}</td><td>{9}</td>" +
+            "<td>{10}</td><td>{11}</td><td>{12}</td>" +
+            "</tr>";
+        return tb.format([street, number, cityname, rooms, size, price,
+            propertyTax, buildingTax,
+            furnitures ? "&#10003" : "&#10007",
+            renovatetd ? "&#10003" : "&#10007",
+            pets ? "&#10003" : "&#10007",
+            elevator ? "&#10003" : "&#10007", floor])
+    }
+
+
+    function onRegionSelected(region) {
+        $.post('/Apartments/Index', { region: region }, function (data, status) {
+            var cityArray = JSON.parse(data);
+
+            $("#selectCity").empty();
+
+            var sel = $("#selectCity");
+            cityArray.forEach(function (city) {
+                sel.append($("<option>").attr('value', city.ID).text(city.cityName));
+            });
+        });
+    }
+
+    function onSearch() {
+        $.ajax({
+            url: '/Apartments/GetApartments',
+            data: {
+                "cityId": $("#selectCity").val(),
+               // "roomNumber": $("#roomNum").val() || -1,
+                "roomNumber": 4,
+                "minPrice": $("#minPrice").val() || -1,
+                "maxPrice": $("#maxPrice").val() || -1
+            },
+            type: "GET",
+            success: function (response) {
+                response = JSON.parse(response);
+
+                // Sort by price
+                response.sort(function (a, b) {
+                    return a.price - b.price;
+                });
+
+                $("#tableBody").empty();
+
+                response.forEach(function (apartment) {
+                    //TODO - add all wanted parameters
+                    $("#tableBody").append(tableBuilder(apartment.street,
+                        apartment.houseNumber,
+                        apartment.cityName,
+                        apartment.roomsNumber,
+                        apartment.size,
+                        apartment.price,
+                        apartment.cityTax,
+                        apartment.BuildingTax,
+                        apartment.furnitureInculded,
+                        apartment.isRenovatetd,
+                        apartment.arePetsAllowed,
+                        apartment.isThereElivator,
+                        apartment.floor
+                        ));
+            });
+            },
+            error: function (xhr) {
+                //TODO - needed?
+            }
+        });
+    }
+
+
+    // Makes life easier for tableBuilder function
+    String.prototype.format = function (args) {
+        var str = this;
+        return str.replace(String.prototype.format.regex, function (item) {
+            var intVal = parseInt(item.substring(1, item.length - 1));
+            var replace;
+            if (intVal >= 0) {
+                replace = args[intVal];
+            } else if (intVal === -1) {
+                replace = "{";
+            } else if (intVal === -2) {
+                replace = "}";
+            } else {
+                replace = "";
+            }
+            return replace;
+        });
+    };
+    String.prototype.format.regex = new RegExp("{-?[0-9]+}", "g");
+ </script>
+<form>
+    <div class="form-group">
+        <label for="Region">Which Region?</label>
+        <select asp-items="@Html.GetEnumSelectList<District>()" onchange="onRegionSelected(this.value)" class="form-control"></select>    
+    </div>
+    <div class="form-group">
+        <label for="City">Which City?</label>
+        <select id="selectCity" asp-items="ViewBag.Cities" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label for="RoomNumber">How many rooms?</label>
+        <select class="form-control" id="roomNum">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="minPrice">Minimum price</label>
+        <input type="text" class="form-control" id="minPrice">
+    </div>
+    <div class="form-group">
+        <label for="maxPrice">Maximum price</label>
+        <input type="text" class="form-control" id="maxPrice">
+    </div>
+    <input type="button" class="btn btn-success btn-lg" onclick="onSearch()" value="Search"/>
+</form>
+
+<table id="apartmentsTable" class="table">
+        <thead>
+            <tr>
+                <th>
+                    Street
+                </th>
+                <th>
+                    Nº
+                </th>
+                <th>
+                    City
+                </th>
+                <th>
+                    Rooms
+                </th>
+                <th>
+                    Size
+                </th>
+                <th>
+                    Price
+                </th>
+                <th>
+                    Poperty Tax
+                </th>
+                <th>
+                    Building Tax
+                </th>
+                <th>
+                    Furnitures
+                </th>
+                <th>
+                    Renovatetd
+                </th>
+                <th>
+                    Pets
+                </th>
+                <th>
+                    Elivator
+                </th>
+                @*<th>
+                    Enter Date
+                </th>*@
+                <th>
+                    Floor
+                </th>
+            </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+    </table>
