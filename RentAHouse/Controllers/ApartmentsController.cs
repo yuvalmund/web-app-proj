@@ -14,6 +14,7 @@ using RentAHouse.Models;
 using System.Web;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
+using Newtonsoft.Json;
 
 namespace RentAHouse.Controllers
 {
@@ -74,6 +75,18 @@ namespace RentAHouse.Controllers
                 //return RedirectToAction(nameof(Index));
             }
             return View("~/Views/Home/Index.cshtml");
+        }
+
+        [HttpPost]
+        public async Task<string> GetApartments()
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            List<Apartment> MyApartments = _context.Apartment.Where(i => i.owner.Id == userId).ToList();
+
+            string MyAp = JsonConvert.SerializeObject(MyApartments);
+
+            return MyAp;
         }
 
         // GET: Apartments/Edit/5
