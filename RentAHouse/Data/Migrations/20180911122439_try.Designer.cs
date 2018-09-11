@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RentAHouse.Data;
 
-namespace RentAHouse.Data.Migrations
+namespace RentAHouse.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180909131045_withAuth5")]
-    partial class withAuth5
+    [Migration("20180911122439_try")]
+    partial class @try
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
