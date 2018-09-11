@@ -12,8 +12,6 @@ using Newtonsoft.Json;
 
 namespace RentAHouse.Areas.Identity.Pages.Account.Manage
 {
- 
-
     public class MyApatementsModel : PageModel
     {
         public void OnGet()
