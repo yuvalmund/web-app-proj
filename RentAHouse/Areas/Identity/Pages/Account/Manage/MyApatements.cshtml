@@ -1,0 +1,82 @@
+﻿@page
+@model MyApatementsModel
+@{
+}
+<head>
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+</head>
+<script>
+    $( document ).ready(function() {
+        $.ajax({
+            url: "/../../../Apartments/GetApartmentsByOwner",
+            method: "POST",
+        }).done(function (data) {
+            var apatments = JSON.parse(data);
+            apatments.forEach(function (ap) {
+                var addap = "<tr><td>"
+                + ap.street + "</td> <td>"
+                + ap.houseNumber + "</td> <td>"
+                + ap.cityName + "</td> <td>"
+                + ap.roomsNumber + "</td> <td>"
+                + ap.size + "</td> <td>"
+                + ap.price + "</td> <td>"
+                + ap.cityTax + "</td> <td>"
+                + ap.BuildingTax + "</td> <td>"
+                + ap.furnitureInculded + "</td> <td>"
+                + ap.furnitureInculded + "</td> <td>"
+                + ap.isRenovatetd + "</td> <td>"
+                + ap.arePetsAllowed + "</td> <td>"
+                + ap.isThereElivator + "</td> <td>"
+                    + ap.floor + "</td> </tr>"
+                $("#tableBody").append(addap);
+            })
+        });
+});
+</script>
+
+<table id="apartmentsTable" class="table">
+    <thead>
+        <tr>
+            <th>
+                Street
+            </th>
+            <th>
+                Nº
+            </th>
+            <th>
+                City
+            </th>
+            <th>
+                Rooms
+            </th>
+            <th>
+                Size
+            </th>
+            <th>
+                Price
+            </th>
+            <th>
+                Poperty Tax
+            </th>
+            <th>
+                Building Tax
+            </th>
+            <th>
+                Furnitures
+            </th>
+            <th>
+                Renovatetd
+            </th>
+            <th>
+                Pets
+            </th>
+            <th>
+                Elivator
+            </th>
+            <th>
+                Floor
+            </th>
+        </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+</table>

@@ -15,6 +15,7 @@ using System;
 using System.Web;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
+using Newtonsoft.Json;
 
 namespace RentAHouse.Controllers
 {
@@ -50,6 +51,17 @@ namespace RentAHouse.Controllers
                 District dis = (District)region;
                 n = _context.City.Where(i => i.region == dis).ToList();
             }
+
+            var json = JsonConvert.SerializeObject(n);
+
+            return json;
+        }
+
+        public async Task<string> GetAllCites(int region)
+        {
+            List<City> n;
+
+            n = _context.City.ToList();
 
             var json = JsonConvert.SerializeObject(n);
 
@@ -132,9 +144,41 @@ namespace RentAHouse.Controllers
         // POST: Apartments/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //[HttpPost]
+        //public async Task<IActionResult> Create([Bind("ID,city,street,houseNumber,roomsNumber,size,price,cityTax,BuildingTax,furnitureInculded,isRenovatetd,arePetsAllowed,isThereElivator,EnterDate,floor")] Apartment apartment)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        //        List<ApartmentOwner> Owner = _context.ApartmentOwner.Where(i => i.Id == userId).ToList();
+        //        apartment.owner = Owner[0];
+        //        _context.Add(apartment);
+        //        await _context.SaveChangesAsync();
+        //        //return RedirectToAction(nameof(Index));
+        //    }
+        //    return View("~/Views/Home/Index.cshtml");
+        //}
+
         [HttpPost]
-        public async Task<IActionResult> Create([Bind("ID,street,houseNumber,roomsNumber,size,price,cityTax,BuildingTax,furnitureInculded,isRenovatetd,arePetsAllowed,isThereElivator,EnterDate,floor")] Apartment apartment)
+        public async Task<IActionResult> Create(string city, string street, int houseNumber, int roomsNumber, int size,int price,int cityTax,int BuildingTax,bool furnitureInculded,bool isRenovatetd,bool arePetsAllowed,bool isThereElivator,DateTime EnterDate,int floor)
         {
+            Apartment apartment = new Apartment();
+            apartment.city = _context.City.Where(i => i.ID == Convert.ToInt32(city)).ToList()[0];
+            apartment.street = street;
+            apartment.houseNumber = houseNumber;
+            apartment.roomsNumber = roomsNumber;
+            apartment.size = size;
+            apartment.price = price;
+            apartment.cityTax = cityTax;
+            apartment.BuildingTax = BuildingTax;
+            apartment.furnitureInculded = furnitureInculded;
+            apartment.isRenovatetd = isRenovatetd;
+            apartment.arePetsAllowed = arePetsAllowed;
+            apartment.isThereElivator = isThereElivator;
+            apartment.EnterDate = EnterDate;
+            apartment.floor = floor;
+
             if (ModelState.IsValid)
             {
                 var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -146,6 +190,44 @@ namespace RentAHouse.Controllers
                 //return RedirectToAction(nameof(Index));
             }
             return View("~/Views/Home/Index.cshtml");
+        }
+
+        [HttpPost]
+        public async Task<string> GetApartmentsByOwner()
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var queryApartments =
+                  from currOwner in _context.ApartmentOwner
+                  where currOwner.Id == userId
+                  join currApartment in _context.Apartment on currOwner.Id equals currApartment.owner.Id
+                  join currCity in _context.City on currApartment.city equals currCity
+                  select new
+                  {
+                      currOwner.firstName,
+                      currOwner.lastName,
+                      currOwner.Email,
+                      currOwner.rate,
+                      currApartment.ID,
+                      currApartment.street,
+                      currApartment.houseNumber,
+                      currApartment.roomsNumber,
+                      currApartment.size,
+                      currApartment.price,
+                      currApartment.cityTax,
+                      currApartment.BuildingTax,
+                      currApartment.furnitureInculded,
+                      currApartment.isRenovatetd,
+                      currApartment.arePetsAllowed,
+                      currApartment.isThereElivator,
+                      currApartment.floor,
+                      currCity.cityName,
+                      currCity.region
+                  };
+
+            string MyAp = JsonConvert.SerializeObject(queryApartments.ToList());
+
+            return MyAp;
         }
 
         // GET: Apartments/Edit/5
