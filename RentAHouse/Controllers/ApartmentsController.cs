@@ -38,8 +38,8 @@ namespace RentAHouse.Controllers
         }
 
 
-        [HttpPost]
-        public async Task<string> Index(int region)
+        [HttpGet]
+        public string GetCities(int region)
         {
             List<City> n;
             if (region == (int)District.All)
@@ -96,7 +96,8 @@ namespace RentAHouse.Controllers
                     currApartment.isThereElivator,
                     currApartment.floor,
                     currCity.cityName,
-                    currCity.region
+                    currCity.region,
+                    currApartment.EnterDate
                 };
 
             if (roomNumber != -1)
