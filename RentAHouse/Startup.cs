@@ -12,6 +12,10 @@ using Microsoft.EntityFrameworkCore;
 using RentAHouse.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Protocols;
+using System.Data.SqlClient;
+using System.Data;
+using System.IO;
 
 namespace RentAHouse
 {
@@ -72,6 +76,50 @@ namespace RentAHouse
                     name: "default",
                     template: "{controller=Apartments}/{action=Index}/{id?}");
             });
+
+            string constr = Configuration.GetConnectionString("DefaultConnection"); ;
+            using (SqlConnection con = new SqlConnection(constr))
+            {
+                using (SqlCommand cmd = new SqlCommand("SELECT ct.ID, ct.avarageSalary, ct.region, ct.GraduatesPercents,ap.roomsNumber, ap.size, ap.isRenovatetd, ap.price FROM dbo.Apartment ap, dbo.City ct where ct.ID = ap.cityID"))
+                {
+                    using (SqlDataAdapter sda = new SqlDataAdapter())
+                    {
+                        cmd.Connection = con;
+                        sda.SelectCommand = cmd;
+                        using (DataTable dt = new DataTable())
+                        {
+                            sda.Fill(dt);
+
+                            //Build the CSV file data as a Comma separated string.
+                            string csv = string.Empty;
+
+                            foreach (DataColumn column in dt.Columns)
+                            {
+                                //Add the Header row for CSV file.
+                                csv += column.ColumnName + ',';
+                            }
+
+                            //Add new line.
+                            csv += "\r\n";
+
+                            foreach (DataRow row in dt.Rows)
+                            {
+                                foreach (DataColumn column in dt.Columns)
+                                {
+                                    //Add the Data rows.
+                                    csv += row[column.ColumnName].ToString().Replace(",", ";") + ',';
+                                }
+
+                                //Add new line.
+                                csv += "\r\n";
+                            }
+
+                            //Download the CSV file.
+                            File.WriteAllText("ML\\data.csv", csv);
+                        }
+                    }
+                }
+            }
         }
     }
 }
