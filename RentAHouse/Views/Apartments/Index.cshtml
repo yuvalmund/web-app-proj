@@ -8,27 +8,19 @@
 <h2>Search for your next house</h2>
 
 <script>
-
     // TODO - add View button for every row
-    function tableBuilder(street, number, cityname, rooms, size, price,
-        propertyTax, buildingTax, furnitures, renovatetd, pets, elevator, floor) {
-        
-        var tb = "<tr>" +
-            "<td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td>" +
-            "<td>{5}</td><td>{6}</td><td>{7}</td><td>{8}</td><td>{9}</td>" +
-            "<td>{10}</td><td>{11}</td><td>{12}</td>" +
-            "</tr>";
-        return tb.format([street, number, cityname, rooms, size, price,
-            propertyTax, buildingTax,
-            furnitures ? "&#10003" : "&#10007",
-            renovatetd ? "&#10003" : "&#10007",
-            pets ? "&#10003" : "&#10007",
-            elevator ? "&#10003" : "&#10007", floor])
+    //"&#10003" : "&#10007"
+    function tableBuilder(street, number, cityname, rooms, size, price) {
+      
+        var tb = "<tr><td>{0}</td><td>{1}</td>" +
+                 "<td>{2}</td><td>{3}</td><td>{4}</td>" +
+                 "<td>{5}</td></tr>";
+        return tb.format([street, number, cityname, rooms, size, price]);
     }
 
 
     function onRegionSelected(region) {
-        $.post('/Apartments/Index', { region: region }, function (data, status) {
+        $.get('/Apartments/GetCities', { region: region }, function (data) {
             var cityArray = JSON.parse(data);
 
             $("#selectCity").empty();
@@ -45,8 +37,7 @@
             url: '/Apartments/GetApartments',
             data: {
                 "cityId": $("#selectCity").val(),
-               // "roomNumber": $("#roomNum").val() || -1,
-                "roomNumber": 4,
+                "roomNumber": $("#roomNum").val() || -1,
                 "minPrice": $("#minPrice").val() || -1,
                 "maxPrice": $("#maxPrice").val() || -1
             },
@@ -75,7 +66,8 @@
                         apartment.isRenovatetd,
                         apartment.arePetsAllowed,
                         apartment.isThereElivator,
-                        apartment.floor
+                        apartment.floor,
+                        apartment.EnterDate
                         ));
             });
             },
@@ -117,21 +109,15 @@
     </div>
     <div class="form-group">
         <label for="RoomNumber">How many rooms?</label>
-        <select class="form-control" id="roomNum">
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
-        </select>
+        <input type="number" class="form-control" id="roomNum">
     </div>
     <div class="form-group">
         <label for="minPrice">Minimum price</label>
-        <input type="text" class="form-control" id="minPrice">
+        <input type="number" class="form-control" id="minPrice">
     </div>
     <div class="form-group">
         <label for="maxPrice">Maximum price</label>
-        <input type="text" class="form-control" id="maxPrice">
+        <input type="number" class="form-control" id="maxPrice">
     </div>
     <input type="button" class="btn btn-success btn-lg" onclick="onSearch()" value="Search"/>
 </form>
@@ -157,7 +143,7 @@
                 <th>
                     Price
                 </th>
-                <th>
+                @*<th>
                     Poperty Tax
                 </th>
                 <th>
@@ -175,12 +161,9 @@
                 <th>
                     Elivator
                 </th>
-                @*<th>
-                    Enter Date
-                </th>*@
                 <th>
                     Floor
-                </th>
+                </th>*@
             </tr>
         </thead>
         <tbody id="tableBody"></tbody>
