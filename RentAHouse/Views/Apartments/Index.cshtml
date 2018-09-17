@@ -6,23 +6,23 @@
 }
 
 <h2>Search for your next house</h2>
-
+<canvas id="canvas"></canvas>
 <script>
     var apartments;
 
     function tableBuilder(apartment) {
-      
+
         var tb = "<td>{0}</td><td>{1}</td>" +
             "<td>{2}</td><td>{3}</td><td>{4}</td>" +
             "<td>{5}</td>" +
             "<td><input id='seeMoreButton" + apartment.ID + "' type='button' class='btn btn - success btn - lg' value='See more' data-toggle='modal' data-target='#modal' onclick='onSeeMore(" + apartment.ID + ")'/></td>";
 
         return tb.format([apartment.street,
-            apartment.houseNumber,
-            apartment.cityName,
-            apartment.roomsNumber,
-            apartment.size,
-            apartment.price]);
+        apartment.houseNumber,
+        apartment.cityName,
+        apartment.roomsNumber,
+        apartment.size,
+        apartment.price]);
     }
 
 
@@ -64,7 +64,7 @@
                     row = document.createElement("TR");
                     row.innerHTML = tableBuilder(apartment);
                     $("#tableBody").append(row);
-            });
+                });
             },
             error: function (xhr) {
                 //TODO - needed?
@@ -74,7 +74,7 @@
 
     function onSeeMore(id) {
         var apartment = apartments.find(a => a.ID == id);
-        
+
         $('#modelStreet').text(apartment.street);
         $("#modelNumber").text(apartment.houseNumber);
         $("#modelPrice").text(apartment.price);
@@ -91,10 +91,6 @@
         $("#modelDate").text(apartment.EnterDate.slice(0, 10));
         $("#modelOwnerName").text(apartment.firstName + " " + apartment.lastName);
 
-        $.post('/ApartmentViews/addClick', { apartment: id }, function (data) {
-
-        });
-        
     }
 
     // Makes life easier for tableBuilder function
@@ -116,11 +112,11 @@
         });
     };
     String.prototype.format.regex = new RegExp("{-?[0-9]+}", "g");
- </script>
+</script>
 <form>
     <div class="form-group">
         <label for="Region">Which Region?</label>
-        <select asp-items="@Html.GetEnumSelectList<District>()" onchange="onRegionSelected(this.value)" class="form-control"></select>    
+        <select asp-items="@Html.GetEnumSelectList<District>()" onchange="onRegionSelected(this.value)" class="form-control"></select>
     </div>
     <div class="form-group">
         <label for="City">Which City?</label>
@@ -138,122 +134,127 @@
         <label for="maxPrice">Maximum price</label>
         <input type="number" class="form-control" id="maxPrice">
     </div>
-    <input type="button" class="btn btn-success btn-lg" onclick="onSearch()" value="Search"/>
+    <input type="button" class="btn btn-success btn-lg" onclick="onSearch()" value="Search" />
 </form>
 
 <table id="apartmentsTable" class="table">
-        <thead>
-            <tr>
-                <th>
-                    Street
-                </th>
-                <th>
-                    Nº
-                </th>
-                <th>
-                    City
-                </th>
-                <th>
-                    Rooms
-                </th>
-                <th>
-                    Size
-                </th>
-                <th>
-                    Price
-                </th>
-            </tr>
-        </thead>
-        <tbody id="tableBody"></tbody>
-    </table>
+    <thead>
+        <tr>
+            <th>
+                Street
+            </th>
+            <th>
+                Nº
+            </th>
+            <th>
+                City
+            </th>
+            <th>
+                Rooms
+            </th>
+            <th>
+                Size
+            </th>
+            <th>
+                Price
+            </th>
+        </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+</table>
 
 <!-- Modal -->
 <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Apartment Details</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <table class="table">
-            <tbody>
-                <tr>
-                    <th>Street</th>
-                    <td id="modelStreet"></td>
-                </tr>
-                <tr>
-                    <th>Number</th>
-                    <td id="modelNumber"></td>
-                </tr>
-                <tr>
-                    <th>City</th>
-                    <td id="modelCity"></td>
-                </tr>
-                <tr>
-                    <th>Price</th>
-                    <td id="modelPrice"></td>
-                </tr>
-                <tr>
-                    <th>Size</th>
-                    <td id="modelSize"></td>
-                </tr>
-                <tr>
-                    <th>Rooms</th>
-                    <td id="modelRooms"></td>
-                </tr>
-                <tr>
-                    <th>Floor</th>
-                    <td id="modelFloor"></td>
-                </tr>
-                <tr>
-                    <th>Tax</th>
-                    <td id="modelCityTax"></td>
-                </tr>
-                <tr>
-                    <th>Building Tax</th>
-                    <td id="modelBuildingTax"></td>
-                </tr>
-                <tr>
-                    <th>Renovated</th>
-                    <td id="modelRenovated"></td>
-                </tr>
-                <tr>
-                    <th>Pets</th>
-                    <td id="modelPets"></td>
-                </tr>
-                <tr>
-                    <th>Elevator</th>
-                    <td id="modelElevator"></td>
-                </tr>
-                <tr>
-                    <th>Furniture</th>
-                    <td id="modelFurniture"></td>
-                </tr>
-                <tr>
-                    <th>Enter Date</th>
-                    <td id="modelDate"></td>
-                </tr>
-            </tbody>
-        </table>
-      </div>
-      <div class="modal-footer">
-          <table class="table">
-              <thead>
-                  <tr>
-                      <th>Property owner</th>
-                  </tr>
-              </thead>
-              <tbody>
-                  <tr>
-                      <td id="modelOwnerName"></td>
-                      <td><button type="button" class="btn btn-primary">Contact Owner</button></td>
-                  </tr>
-              </tbody>
-          </table>
-      </div>
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Apartment Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th>Street</th>
+                            <td id="modelStreet"></td>
+                        </tr>
+                        <tr>
+                            <th>Number</th>
+                            <td id="modelNumber"></td>
+                        </tr>
+                        <tr>
+                            <th>City</th>
+                            <td id="modelCity"></td>
+                        </tr>
+                        <tr>
+                            <th>Price</th>
+                            <td id="modelPrice"></td>
+                        </tr>
+                        <tr>
+                            <th>Size</th>
+                            <td id="modelSize"></td>
+                        </tr>
+                        <tr>
+                            <th>Rooms</th>
+                            <td id="modelRooms"></td>
+                        </tr>
+                        <tr>
+                            <th>Floor</th>
+                            <td id="modelFloor"></td>
+                        </tr>
+                        <tr>
+                            <th>Tax</th>
+                            <td id="modelCityTax"></td>
+                        </tr>
+                        <tr>
+                            <th>Building Tax</th>
+                            <td id="modelBuildingTax"></td>
+                        </tr>
+                        <tr>
+                            <th>Renovated</th>
+                            <td id="modelRenovated"></td>
+                        </tr>
+                        <tr>
+                            <th>Pets</th>
+                            <td id="modelPets"></td>
+                        </tr>
+                        <tr>
+                            <th>Elevator</th>
+                            <td id="modelElevator"></td>
+                        </tr>
+                        <tr>
+                            <th>Furniture</th>
+                            <td id="modelFurniture"></td>
+                        </tr>
+                        <tr>
+                            <th>Enter Date</th>
+                            <td id="modelDate"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Property owner</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td id="modelOwnerName"></td>
+                            <td><button type="button" class="btn btn-primary">Contact Owner</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
+
+
+@section Scripts{
+<script src="~/js//canvas.js"></script>
+}
