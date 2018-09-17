@@ -155,7 +155,7 @@ namespace RentAHouse.Controllers
         {
             ApartmentViews view = new ApartmentViews();
             view.apartment = _context.Apartment.Where(i => i.ID == apartment).ToList()[0];
-            view.date = DateTime.Now;
+            view.date = DateTime.Today;
 
             Create(view);
             //_context.Add(view);
