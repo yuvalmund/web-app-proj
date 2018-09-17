@@ -91,6 +91,11 @@
         $("#modelDate").text(apartment.EnterDate.slice(0, 10));
         $("#modelOwnerName").text(apartment.firstName + " " + apartment.lastName);
 
+        $.post('/ApartmentViews/addClick', { apartment: id }, function (data) {
+        });
+
+
+
     }
 
     // Makes life easier for tableBuilder function
