@@ -82,12 +82,14 @@ function onSeeMore(id) {
     $("#modelDate").text(apartment.EnterDate.slice(0, 10));
     $("#modelOwnerName").text("Name: " + apartment.firstName + " " + apartment.lastName);
     $("#modelOwnerRate").text("Rate: " + apartment.rate + "/5");
+    $("#modalContact").data("OwnerEmail", apartment.Email);
 
-    $.post('/ApartmentViews/addClick', { apartment: id }, function (data) {
-    });
+    // Counts clicks as info for owner
+    $.post('/ApartmentViews/addClick', { apartment: id }, function (data) {});
+}
 
-
-
+function contactOwner() {
+    var email = $("#modalContact").data().OwnerEmail;
 }
 
 // Makes life easier for tableBuilder function
