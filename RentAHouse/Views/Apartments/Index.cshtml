@@ -4,7 +4,6 @@
 @{
     ViewData["Title"] = "Index";
 }
-
 <h2>Search for your next house</h2>
 <form>
     <div class="form-group">
@@ -56,6 +55,8 @@
     <tbody id="tableBody"></tbody>
 </table>
 
+
+
 <!-- Modal -->
 <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -65,6 +66,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
+                <div id="map" style="width: 97%;height: 200px;position: sticky;"></div>
             </div>
             <div class="modal-body">
                 <table class="table">
@@ -150,5 +152,6 @@
     </div>
 </div>
 @section Scripts{
+    <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?key=AlNQea4USaYJiJV4kPGxdLToVtMi7j8YKvoc3CfzjJN0ZVDkyHT809I5wOvQeMdE'></script>
     <script src="~/js//apartmentView.js"></script>
 }
