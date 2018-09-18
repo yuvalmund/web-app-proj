@@ -1,5 +1,5 @@
 ﻿$("#composeForm").submit(function (e) {
-    $('modalContact').modal('hide');
+    e.preventDefault();
     sendMessage($("#modalContact").data().OwnerEmail,
                 $("#composeReplyEmail").val(),
                 $("#composeSubject").val(),
