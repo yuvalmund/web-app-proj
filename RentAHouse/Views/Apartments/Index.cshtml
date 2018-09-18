@@ -61,7 +61,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Apartment Details</h5>
+                <h3 class="modal-title" id="exampleModalLongTitle">Apartment Details</h3>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -136,9 +136,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                        <tr style="text-align: left;">
                             <td id="modelOwnerName"></td>
-                            <td><button type="button" class="btn btn-primary">Contact Owner</button></td>
+                            <td id="modelOwnerRate"></td>
+                            <td style="text-align: right;"><button type="button" class="btn btn-primary">Contact Owner</button></td>
                         </tr>
                     </tbody>
                 </table>
@@ -146,8 +147,6 @@
         </div>
     </div>
 </div>
-
-
 @section Scripts{
     <script src="~/js//apartmentView.js"></script>
 }

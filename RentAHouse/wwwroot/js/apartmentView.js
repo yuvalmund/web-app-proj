@@ -80,7 +80,8 @@ function onSeeMore(id) {
     $("#modelElevator").text(apartment.isThereElivator ? "✓" : "✗");
     $("#modelFurniture").text(apartment.furnitureInculded ? "✓" : "✗");
     $("#modelDate").text(apartment.EnterDate.slice(0, 10));
-    $("#modelOwnerName").text(apartment.firstName + " " + apartment.lastName);
+    $("#modelOwnerName").text("Name: " + apartment.firstName + " " + apartment.lastName);
+    $("#modelOwnerRate").text("Rate: " + apartment.rate + "/5");
 
     $.post('/ApartmentViews/addClick', { apartment: id }, function (data) {
     });
