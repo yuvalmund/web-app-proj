@@ -6,7 +6,6 @@
 }
 
 <h2>Search for your next house</h2>
-@*<canvas id="myCanvas" width="200" height="100" style="border:1px solid"></canvas>*@
 <form>
     <div class="form-group">
         <label for="Region">Which Region?</label>
@@ -31,7 +30,7 @@
     <input type="button" class="btn btn-success btn-lg" onclick="onSearch()" value="Search" />
 </form>
 
-<table id="apartmentsTable" class="table">
+<table id="apartmentsTable" style="display: none" class="table">
     <thead>
         <tr>
             <th>
@@ -150,6 +149,5 @@
 
 
 @section Scripts{
-    @*<script src="~/js//canvas.js"></script>*@
     <script src="~/js//apartmentView.js"></script>
 }

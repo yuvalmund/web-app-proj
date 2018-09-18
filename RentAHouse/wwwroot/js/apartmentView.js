@@ -55,6 +55,7 @@ function onSearch() {
                 row.innerHTML = tableBuilder(apartment);
                 $("#tableBody").append(row);
             });
+            $("#apartmentsTable").css('display', apartments.length ? '' : 'none');
         },
         error: function (xhr) {
             //TODO - needed?
