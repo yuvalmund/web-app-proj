@@ -4,9 +4,29 @@
 }
 <head>
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+    <style>
+        body {
+            font: 12px Arial;
+        }
+
+        path {
+            stroke: steelblue;
+            stroke-width: 2;
+            fill: none;
+        }
+
+        .axis path,
+        .axis line {
+            fill: none;
+            stroke: grey;
+            stroke-width: 1;
+            shape-rendering: crispEdges;
+        }
+        
+    </style>
 </head>
 <script>
-    $( document ).ready(function() {
+    $(document).ready(function () {
         $.ajax({
             url: "/../../../Apartments/GetApartmentsByOwner",
             method: "POST",
@@ -14,69 +34,146 @@
             var apatments = JSON.parse(data);
             apatments.forEach(function (ap) {
                 var addap = "<tr><td>"
-                + ap.street + "</td> <td>"
-                + ap.houseNumber + "</td> <td>"
-                + ap.cityName + "</td> <td>"
-                + ap.roomsNumber + "</td> <td>"
-                + ap.size + "</td> <td>"
-                + ap.price + "</td> <td>"
-                + ap.cityTax + "</td> <td>"
-                + ap.BuildingTax + "</td> <td>"
-                + ap.furnitureInculded + "</td> <td>"
-                + ap.furnitureInculded + "</td> <td>"
-                + ap.isRenovatetd + "</td> <td>"
-                + ap.arePetsAllowed + "</td> <td>"
-                + ap.isThereElivator + "</td> <td>"
+                    + ap.street + "</td> <td>"
+                    + ap.houseNumber + "</td> <td>"
+                    + ap.cityName + "</td> <td>"
+                    + ap.roomsNumber + "</td> <td>"
+                    + ap.size + "</td> <td>"
+                    + ap.price + "</td> <td>"
+                    + ap.cityTax + "</td> <td>"
+                    + ap.BuildingTax + "</td> <td>"
+                    + ap.furnitureInculded + "</td> <td>"
+                    + ap.furnitureInculded + "</td> <td>"
+                    + ap.isRenovatetd + "</td> <td>"
+                    + ap.arePetsAllowed + "</td> <td>"
+                    + ap.isThereElivator + "</td> <td>"
                     + ap.floor + "</td> </tr>"
                 $("#tableBody").append(addap);
             })
         });
-});
+    });
+</script>
+<script src="//d3js.org/d3.v3.min.js"></script>
+
+
+    <table id="apartmentsTable" class="table">
+        <thead>
+            <tr>
+                <th>
+                    Street
+                </th>
+                <th>
+                    Nº
+                </th>
+                <th>
+                    City
+                </th>
+                <th>
+                    Rooms
+                </th>
+                <th>
+                    Size
+                </th>
+                <th>
+                    Price
+                </th>
+                <th>
+                    Poperty Tax
+                </th>
+                <th>
+                    Building Tax
+                </th>
+                <th>
+                    Furnitures
+                </th>
+                <th>
+                    Renovatetd
+                </th>
+                <th>
+                    Pets
+                </th>
+                <th>
+                    Elivator
+                </th>
+                <th>
+                    Floor
+                </th>
+            </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+    </table>
+<div id="graph"></div>
+<script>
+    var margin = { top: 30, right: 20, bottom: 30, left: 50 },
+        width = 600 - margin.left - margin.right,
+        height = 270 - margin.top - margin.bottom;
+
+    var parseDate = d3.time.format("%d-%b-%y").parse;
+
+    // Set the ranges
+    var x = d3.time.scale().range([0, width]);
+    var y = d3.scale.linear().range([height, 0]);
+
+    // Define the axes
+    var xAxis = d3.svg.axis().scale(x)
+        .orient("bottom").ticks(5);
+
+    var yAxis = d3.svg.axis().scale(y)
+        .orient("left").ticks(5);
+
+    // Define the line
+    var valueline = d3.svg.line()
+        .x(function (d) { return x(d.date); })
+        .y(function (d) { return y(d.click); });
+
+    // Adds the svg canvas
+    var svg = d3.select("#graph")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform",
+            "translate(" + margin.left + "," + margin.top + ")");
+
+    svg.append("text")
+        .attr("x", (width / 2))
+        .attr("y", 0 - (margin.top / 2))
+        .attr("text-anchor", "middle")
+        .style("font-size", "16px")
+        .style("text-decoration", "underline")
+        .text("Clicks per day");
+
+    // Get the data
+    d3.csv("../../../../data/graph.csv", function (error, data) {
+        data.forEach(function (d) {
+            da = new Date(d.date)
+            spl = da.toString().split(" ")
+            datef = spl[2] + "-" + spl[1] + "-" + spl[3][2] + "" + spl[3][3]
+            d.date = parseDate(datef);
+            d.click = +d.click;
+        });
+
+        // Scale the range of the data
+        x.domain(d3.extent(data, function (d) { return d.date; }));
+        y.domain([0, d3.max(data, function (d) { return d.click; })]);
+
+        // Add the valueline path.
+        svg.append("path")
+            .attr("class", "line")
+            .attr("d", valueline(data));
+
+        // Add the X Axis
+        svg.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + height + ")")
+            .call(xAxis);
+
+        // Add the Y Axis
+        svg.append("g")
+            .attr("class", "y axis")
+            .call(yAxis);
+
+    });
+
 </script>
 
-<table id="apartmentsTable" class="table">
-    <thead>
-        <tr>
-            <th>
-                Street
-            </th>
-            <th>
-                Nº
-            </th>
-            <th>
-                City
-            </th>
-            <th>
-                Rooms
-            </th>
-            <th>
-                Size
-            </th>
-            <th>
-                Price
-            </th>
-            <th>
-                Poperty Tax
-            </th>
-            <th>
-                Building Tax
-            </th>
-            <th>
-                Furnitures
-            </th>
-            <th>
-                Renovatetd
-            </th>
-            <th>
-                Pets
-            </th>
-            <th>
-                Elivator
-            </th>
-            <th>
-                Floor
-            </th>
-        </tr>
-    </thead>
-    <tbody id="tableBody"></tbody>
-</table>
