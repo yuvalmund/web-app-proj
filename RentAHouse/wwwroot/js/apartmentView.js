@@ -5,7 +5,8 @@ function tableBuilder(apartment) {
     var tb = "<td>{0}</td><td>{1}</td>" +
         "<td>{2}</td><td>{3}</td><td>{4}</td>" +
         "<td>{5}</td>" +
-        "<td><input id='seeMoreButton" + apartment.ID + "' type='button' class='btn btn - success btn - lg' value='See more' data-toggle='modal' data-target='#modal' onclick='onSeeMore(" + apartment.ID + ")'/></td>";
+        "<td><input id='seeMoreButton" + apartment.ID +
+        "' type='button' class='btn btn - success btn - lg' value='See more' data-toggle='modal' data-target='#modal' onclick='onSeeMore(" + apartment.ID + ")'/></td>";
 
     return tb.format([apartment.street,
     apartment.houseNumber,
@@ -92,9 +93,6 @@ function onSeeMore(id) {
     $.post('/ApartmentViews/addClick', { apartment: id }, function (data) {});
 }
 
-function contactOwner() {
-    var email = $("#modalContact").data().OwnerEmail;
-}
 
 // Makes life easier for tableBuilder function
 String.prototype.format = function (args) {
@@ -115,29 +113,3 @@ String.prototype.format = function (args) {
     });
 };
 String.prototype.format.regex = new RegExp("{-?[0-9]+}", "g");
-
-//Map
-function loadMap(address) {
-
-    $.get('https://dev.virtualearth.net/REST/v1/Locations', {
-        countryRegion: "IL",
-        addressLine: address,
-        maxResaults: 1,
-        key: "AlNQea4USaYJiJV4kPGxdLToVtMi7j8YKvoc3CfzjJN0ZVDkyHT809I5wOvQeMdE"
-    }, function (data) {
-        var coordinates = data.resourceSets[0].resources[0].point.coordinates;
-
-        var map = new Microsoft.Maps.Map(document.getElementById('map'), {
-            /* No need to set credentials if already passed in URL */
-            center: new Microsoft.Maps.Location(coordinates[0], coordinates[1]),
-            mapTypeId: Microsoft.Maps.MapTypeId.aerial,
-            zoom: 16
-        });
-
-        var pushpin = new Microsoft.Maps.Pushpin(map.getCenter(), null);
-        map.entities.push(pushpin);
-     }).fail(function (err) {
-         console.log("fail to find address");
-         var map = new Microsoft.Maps.Map(document.getElementById('map'), {})
-     });
-}

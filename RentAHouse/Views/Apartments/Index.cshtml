@@ -5,6 +5,7 @@
     ViewData["Title"] = "Index";
 }
 <h2>Search for your next house</h2>
+
 <form>
     <div class="form-group">
         <label for="Region">Which Region?</label>
@@ -142,7 +143,7 @@
                             <td id="modelOwnerName"></td>
                             <td id="modelOwnerRate"></td>
                             <td style="text-align: right;">
-                                <button id="modalContact" type="button" class="btn btn-primary" onclick="contactOwner(this)">Contact Owner</button>
+                                <button id="modalContact" type="button" data-toggle='modal' data-target='#compose-modal' data-dismiss="modal" class="btn btn-primary">Contact Owner</button>
                             </td>
                         </tr>
                     </tbody>
@@ -151,7 +152,44 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="compose-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Compose</h4>
+            </div>
+            <form id="composeForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <input type="email" class="form-control" id="composeReplyEmail" placeholder="Your email address" required />
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="composeSubject" placeholder="Subject" required />
+                    </div>
+
+                    <div class="form-group">
+                        <textarea class="form-control" id="composeMessage" placeholder="Message" rows="10" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" id="send-button" class="btn btn-primary">Send</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 @section Scripts{
+    <script type="text/javascript" src="https://cdn.emailjs.com/sdk/2.2.4/email.min.js"></script>
     <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?key=AlNQea4USaYJiJV4kPGxdLToVtMi7j8YKvoc3CfzjJN0ZVDkyHT809I5wOvQeMdE'></script>
     <script src="~/js//apartmentView.js"></script>
+    <script src="~/js//map.js"></script>
+    <script src="~/js//mail.js"></script>
+
 }
