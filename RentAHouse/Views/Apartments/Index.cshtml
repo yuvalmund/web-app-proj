@@ -4,9 +4,7 @@
 @{
     ViewData["Title"] = "Index";
 }
-
 <h2>Search for your next house</h2>
-@*<canvas id="myCanvas" width="200" height="100" style="border:1px solid"></canvas>*@
 <form>
     <div class="form-group">
         <label for="Region">Which Region?</label>
@@ -31,7 +29,7 @@
     <input type="button" class="btn btn-success btn-lg" onclick="onSearch()" value="Search" />
 </form>
 
-<table id="apartmentsTable" class="table">
+<table id="apartmentsTable" style="display: none" class="table">
     <thead>
         <tr>
             <th>
@@ -57,15 +55,18 @@
     <tbody id="tableBody"></tbody>
 </table>
 
+
+
 <!-- Modal -->
 <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Apartment Details</h5>
+                <h3 class="modal-title" id="exampleModalLongTitle">Apartment Details</h3>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
+                <div id="map" style="width: 97%;height: 200px;position: sticky;"></div>
             </div>
             <div class="modal-body">
                 <table class="table">
@@ -137,9 +138,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                        <tr style="text-align: left;">
                             <td id="modelOwnerName"></td>
-                            <td><button type="button" class="btn btn-primary">Contact Owner</button></td>
+                            <td id="modelOwnerRate"></td>
+                            <td style="text-align: right;">
+                                <button id="modalContact" type="button" class="btn btn-primary" onclick="contactOwner(this)">Contact Owner</button>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -147,9 +151,7 @@
         </div>
     </div>
 </div>
-
-
 @section Scripts{
-    @*<script src="~/js//canvas.js"></script>*@
+    <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?key=AlNQea4USaYJiJV4kPGxdLToVtMi7j8YKvoc3CfzjJN0ZVDkyHT809I5wOvQeMdE'></script>
     <script src="~/js//apartmentView.js"></script>
 }
