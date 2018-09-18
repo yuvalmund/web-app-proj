@@ -41,10 +41,10 @@
         width = 600 - margin.left - margin.right,
         height = 270 - margin.top - margin.bottom;
 
-    var ID
+    var parseDate = d3.time.format("%d-%b-%y").parse;
 
     // Set the ranges
-    var x = d3.scale.linear().range([0, width]);
+    var x = d3.time.scale().range([0, width]);
     var y = d3.scale.linear().range([height, 0]);
 
     // Define the axes
@@ -56,8 +56,8 @@
 
     // Define the line
     var valueline = d3.svg.line()
-        .x(function (d) { return x(d.ID); })
-        .y(function (d) { return y(d.avarageSalary); });
+        .x(function (d) { return x(d.date); })
+        .y(function (d) { return y(d.click); });
 
     // Adds the svg canvas
     var svg = d3.select("body")
@@ -69,15 +69,18 @@
             "translate(" + margin.left + "," + margin.top + ")");
 
     // Get the data
-    d3.csv("../../data/data.csv", function (error, data) {
+    d3.csv("../../data/graph.csv", function (error, data) {
         data.forEach(function (d) {
-            d.ID = d.ID;
-            d.avarageSalary = +d.avarageSalary;
+            da = new Date(d.date)
+            spl = da.toString().split(" ")
+            datef = spl[2] + "-" + spl[1] + "-" + spl[3][2] + "" + spl[3][3]
+            d.date = parseDate(datef);
+            d.click = +d.click;
         });
 
         // Scale the range of the data
-        x.domain([1, d3.max(data, function (d) { return d.ID; })]);
-        y.domain([0, d3.max(data, function (d) { return d.avarageSalary; })]);
+        x.domain(d3.extent(data, function (d) { return d.date; }));
+        y.domain([0, d3.max(data, function (d) { return d.click; })]);
 
         // Add the valueline path.
         svg.append("path")
