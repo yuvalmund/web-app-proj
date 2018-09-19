@@ -29,7 +29,7 @@ namespace RentAHouse.ML
         public bool isThereElivator;
 
         [Column("6")]
-        public bool isThereParkingPlace;
+        public bool furnitureInculded;
 
         [Column("7")]
         public bool isRenovated;

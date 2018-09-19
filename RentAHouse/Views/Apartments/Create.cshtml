@@ -10,44 +10,6 @@
 <h4>Apartment</h4>
 <hr />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script>
-   
-
-    $(document).ready(function () {
-        $.post('/Apartments/GetAllCites', function (data, status) {
-            var cityArray = JSON.parse(data);
-
-            $("#selectCity").empty();
-
-            var sel = $("#selectCity");
-            cityArray.forEach(function (city) {
-                sel.append($("<option>").attr('value', city.ID).text(city.cityName));
-            });
-        });
-    });
-    function send() {
-        $.post('/Apartments/Create',
-            {
-                city: $("#selectCity").val(),
-                street: $("#street").val(),
-                houseNumber: $("#houseNumber").val(),
-                roomsNumber: $("#roomsNumber").val(),
-                price: $("#price").val(),
-                cityTax: $("#cityTax").val(),
-                BuildingTax: $("#BuildingTax").val(),
-                furnitureInculded: $("#furnitureInculded").val(),
-                isRenovatetd: $("#isRenovatetd").val(),
-                arePetsAllowed: $("#arePetsAllowed").val(),
-                isThereElivator: $("#isThereElivator").val(),
-                EnterDate: $("#EnterDate").val(),
-                floor: $("#floor").val()
-            },
-            function (data, status) {
-                
-            });
-    }
-       
-</script>
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create" enctype="multipart/form-data">
@@ -57,86 +19,88 @@
                 <select id="selectCity" asp-for="city" class="form-control"></select>
                 <span asp-validation-for="city" class="text-danger"></span>
             </div>
-                <div class="form-group">
-                    <label asp-for="street" class="control-label"></label>
-                    <input asp-for="street" class="form-control" />
-                    <span asp-validation-for="street" class="text-danger"></span>
+            <div class="form-group">
+                <label asp-for="street" class="control-label"></label>
+                <input asp-for="street" class="form-control" />
+                <span asp-validation-for="street" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="houseNumber" class="control-label"></label>
+                <input asp-for="houseNumber" class="form-control" />
+                <span asp-validation-for="houseNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="roomsNumber" class="control-label"></label>
+                <input asp-for="roomsNumber" id="roomsNumber" class="form-control" />
+                <span asp-validation-for="roomsNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="size" class="control-label"></label>
+                <input asp-for="size" id="size" class="form-control" />
+                <span asp-validation-for="size" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="cityTax" class="control-label"></label>
+                <input asp-for="cityTax" class="form-control" />
+                <span asp-validation-for="cityTax" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BuildingTax" class="control-label"></label>
+                <input asp-for="BuildingTax" class="form-control" />
+                <span asp-validation-for="BuildingTax" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="isRenovatetd" id="isRenoveted" /> @Html.DisplayNameFor(model => model.isRenovatetd)
+                    </label>
                 </div>
-                <div class="form-group">
-                    <label asp-for="houseNumber" class="control-label"></label>
-                    <input asp-for="houseNumber" class="form-control" />
-                    <span asp-validation-for="houseNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="arePetsAllowed" /> @Html.DisplayNameFor(model => model.arePetsAllowed)
+                    </label>
                 </div>
-                <div class="form-group">
-                    <label asp-for="roomsNumber" class="control-label"></label>
-                    <input asp-for="roomsNumber" class="form-control" />
-                    <span asp-validation-for="roomsNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="isThereElivator" id="isThereElivator" /> @Html.DisplayNameFor(model => model.isThereElivator)
+                    </label>
                 </div>
-                <div class="form-group">
-                    <label asp-for="size" class="control-label"></label>
-                    <input asp-for="size" class="form-control" />
-                    <span asp-validation-for="size" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="furnitureInculded" id="furnitureInculded" /> @Html.DisplayNameFor(model => model.furnitureInculded)
+                    </label>
                 </div>
-                <div class="form-group">
-                    <label asp-for="price" class="control-label"></label>
-                    <input asp-for="price" class="form-control" />
-                    <span asp-validation-for="price" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="cityTax" class="control-label"></label>
-                    <input asp-for="cityTax" class="form-control" />
-                    <span asp-validation-for="cityTax" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="BuildingTax" class="control-label"></label>
-                    <input asp-for="BuildingTax" class="form-control" />
-                    <span asp-validation-for="BuildingTax" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <div class="checkbox">
-                        <label>
-                            <input asp-for="furnitureInculded" /> @Html.DisplayNameFor(model => model.furnitureInculded)
-                        </label>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="checkbox">
-                        <label>
-                            <input asp-for="isRenovatetd" /> @Html.DisplayNameFor(model => model.isRenovatetd)
-                        </label>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="checkbox">
-                        <label>
-                            <input asp-for="arePetsAllowed" /> @Html.DisplayNameFor(model => model.arePetsAllowed)
-                        </label>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="checkbox">
-                        <label>
-                            <input asp-for="isThereElivator" /> @Html.DisplayNameFor(model => model.isThereElivator)
-                        </label>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label asp-for="EnterDate" class="control-label"></label>
-                    <input asp-for="EnterDate" class="form-control" />
-                    <span asp-validation-for="EnterDate" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="floor" class="control-label"></label>
-                    <input asp-for="floor" class="form-control" />
-                    <span asp-validation-for="floor" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Create" class="btn btn-default" />
-                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="EnterDate" class="control-label"></label>
+                <input asp-for="EnterDate" class="form-control" />
+                <span asp-validation-for="EnterDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="floor" class="control-label"></label>
+                <input asp-for="floor" class="form-control" />
+                <span asp-validation-for="floor" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="price" class="control-label"></label>
+                <input asp-for="price" id="price" class="form-control" />
+                <input type="button" id="suggestPriceButton" value="Suggest Price" class="btn btn-default" />
+                <span asp-validation-for="price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
         </form>
     </div>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js//CreateAppartment.js"></script>
 }

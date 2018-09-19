@@ -46,7 +46,7 @@ namespace RentAHouse.ML
                 "RoomsNumber",
                 "sizeInMeters",
                 "isThereElivator",
-                "isThereParkingPlace",
+                "furnitureInculded",
                 "isRenovated"),
 
                 // Add  learning algorithm to the pipeline 
@@ -66,7 +66,7 @@ namespace RentAHouse.ML
             return model;
         }
 
-        private static void Evaluate(PredictionModel<ApartmentData, AppartmentPricePrediction> model)
+        public static string Evaluate(PredictionModel<ApartmentData, AppartmentPricePrediction> model)
         {
             // Load the test data from a file
             var testData = new TextLoader(TEST_DATA_PATH).CreateFrom<ApartmentData>(separator: ',');
@@ -78,8 +78,7 @@ namespace RentAHouse.ML
             // Print the RMS and RSquared are evaluation matrixes of the regression model
             // RMS: The lower it is, the better the model is
             // RSquared: takes values between 0 and 1. The closer its value is to 1, the better the model is. 
-            Console.WriteLine($"Rms = {metrics.Rms}");
-            Console.WriteLine($"RSquared = {metrics.RSquared}");
+            return ($"Rms = {metrics.Rms}" + $", RSquared = {metrics.RSquared}");
         }
     }
 }
