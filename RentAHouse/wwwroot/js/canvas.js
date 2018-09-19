@@ -1,97 +1,37 @@
-﻿var canvas = $("#canvas");
-var c = canvas.get(0).getContext('2d');
-c.canvas.width = window.innerWidth;
-c.canvas.height = window.innerHeight;
-var cX = canvas.width / 2;
-var cY = canvas.height / 2;
-var blue = "#447FFF";
-var white = "#FFF";
+﻿var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+ctx.fillStyle = "#FF0000";
+ctx.fillRect(12.5, 30, 175, 70);
 
-// house body
-c.beginPath();
-c.rect(cX - 100, cY - 50, 200, 200);
-c.fillStyle = blue;
-c.fill();
-c.closePath();
+// Draw triangle
+ctx.fillStyle = "#A2322E";
+ctx.beginPath();
+ctx.moveTo(12.5, 30);
+ctx.lineTo(185, 30);
+ctx.lineTo(99, 0);
+ctx.closePath();
+ctx.fill();
 
-// window
-c.beginPath();
-c.rect(cX - 70, cY - 20, 40, 40);
-c.fillStyle = white;
-c.fill();
-c.closePath();
+//windows
+ctx.fillStyle = "#663300";
+ctx.fillRect(25, 40, 35, 50);
+ctx.fillStyle = "#0000FF";
+ctx.fillRect(27, 42, 13, 23);
+ctx.fillRect(43, 42, 13, 23);
+ctx.fillRect(43, 67, 13, 21);
+ctx.fillRect(27, 67, 13, 21);
 
-// roof
-c.beginPath();
-c.moveTo(cX - 100, cY - 50);
-c.lineTo(cX, cY - 150);
-c.lineTo(cX + 100, cY - 50);
-c.lineTo(cX - 100, cY - 50);
-c.fillStyle = blue;
-c.fill();
-c.closePath();
+//door
+ctx.fillStyle = "#754719";
+ctx.fillRect(80, 53, 30, 100);
 
-// door
-c.beginPath();
-c.rect(cX + 20, cY + 71, 50, 80);
-c.fillStyle = white;
-c.fill();
-c.closePath();
+//door knob
+ctx.beginPath();
+ctx.fillStyle = "#F2F2F2";
+ctx.arc(105, 75, 3, 0, 2 * Math.PI);
+ctx.fill();
+ctx.closePath();
 
-// roof decor
-for (var j = 0; j < 5; j++) {
-    for (var i = 0; i < 10; i++) {
-        c.beginPath();
-        c.moveTo((cX - 70) + (i * 20), (cY - 50) - (j * 20));
-        c.lineTo((cX - 80) + (i * 20), (cY - 60) - (j * 20));
-        c.moveTo((cX - 110) + (i * 20), (cY - 50) - (j * 20));
-        c.lineTo((cX - 90) + (i * 20), (cY - 70) - (j * 20));
-        c.strokeStyle = white;
-        c.stroke();
-        c.closePath();
-    }
-}
-
-// body decor
-for (var j = 0; j < 7; j++) {
-    for (var i = 0; i < 8; i++) {
-        c.beginPath();
-        c.moveTo((cX - 100) + (i * 30), (cY + 135) - (j * 30));
-        c.lineTo((cX - 130) + (i * 30), (cY + 135) - (j * 30));
-        c.lineTo((cX - 130) + (i * 30), (cY + 150) - (j * 30));
-        if (j != 6) {
-            c.moveTo((cX - 115) + (i * 30), (cY + 135) - (j * 30));
-            c.lineTo((cX - 115) + (i * 30), (cY + 120) - (j * 30));
-            c.lineTo((cX - 85) + (i * 30), (cY + 120) - (j * 30));
-        }
-        //c.rect((cX - 100) + (i * 30), (cY + 135) - (j * 30), 30, 15);
-        //if ( j != 6 ) {
-        //c.rect((cX - 85) + (i * 30), (cY + 120) - (j * 30), 30, 15);
-        //}
-        c.strokeStyle = white;
-        c.stroke();
-        c.closePath();
-    }
-}
-
-// chimney
-c.beginPath();
-c.rect(cX + 60, cY - 120, 20, 50);
-c.rect(cX + 50, cY - 130, 40, 10);
-c.fillStyle = blue;
-c.fill();
-c.closePath();
-
-// window lines
-c.beginPath();
-c.moveTo(cX - 70, cY);
-c.lineTo(cX - 30, cY);
-c.moveTo(cX - 50, cY - 20);
-c.lineTo(cX - 50, cY + 20);
-c.strokeStyle = blue;
-c.lineWidth = 2;
-c.stroke();
-c.closePath();
-
-canvas[0] = c;
-
+//Text on the Right
+//ctx.font = "20px Veranda";
+//ctx.fillText("RentAHouse", 130, 60);

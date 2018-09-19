@@ -160,6 +160,7 @@ namespace RentAHouse.Controllers
         //    return View("~/Views/Home/Index.cshtml");
         //}
 
+
         [HttpPost]
         public async Task<IActionResult> Create(string city, string street, int houseNumber, int roomsNumber, int size,int price,int cityTax,int BuildingTax,bool furnitureInculded,bool isRenovatetd,bool arePetsAllowed,bool isThereElivator,DateTime EnterDate,int floor)
         {

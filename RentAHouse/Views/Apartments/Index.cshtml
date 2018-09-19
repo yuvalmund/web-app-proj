@@ -4,115 +4,8 @@
 @{
     ViewData["Title"] = "Index";
 }
-
 <h2>Search for your next house</h2>
-<canvas id="canvas"></canvas>
-<script>
-    var apartments;
 
-    function tableBuilder(apartment) {
-
-        var tb = "<td>{0}</td><td>{1}</td>" +
-            "<td>{2}</td><td>{3}</td><td>{4}</td>" +
-            "<td>{5}</td>" +
-            "<td><input id='seeMoreButton" + apartment.ID + "' type='button' class='btn btn - success btn - lg' value='See more' data-toggle='modal' data-target='#modal' onclick='onSeeMore(" + apartment.ID + ")'/></td>";
-
-        return tb.format([apartment.street,
-        apartment.houseNumber,
-        apartment.cityName,
-        apartment.roomsNumber,
-        apartment.size,
-        apartment.price]);
-    }
-
-
-    function onRegionSelected(region) {
-        $.get('/Apartments/GetCities', { region: region }, function (data) {
-            var cityArray = JSON.parse(data);
-
-            $("#selectCity").empty();
-            var sel = $("#selectCity");
-            cityArray.forEach(function (city) {
-
-                sel.append($("<option>").attr('value', city.ID).text(city.cityName));
-            });
-        });
-    }
-
-    function onSearch() {
-        $.ajax({
-            url: '/Apartments/GetApartments',
-            data: {
-                "cityId": $("#selectCity").val(),
-                "roomNumber": $("#roomNum").val() || -1,
-                "minPrice": $("#minPrice").val() || -1,
-                "maxPrice": $("#maxPrice").val() || -1
-            },
-            type: "GET",
-            success: function (response) {
-                apartments = JSON.parse(response);
-
-                // Sort by price
-                apartments.sort(function (a, b) {
-                    return a.price - b.price;
-                });
-
-                $("#tableBody").empty();
-
-                apartments.forEach(function (apartment) {
-                    //TODO - add all wanted parameters
-                    row = document.createElement("TR");
-                    row.innerHTML = tableBuilder(apartment);
-                    $("#tableBody").append(row);
-                });
-            },
-            error: function (xhr) {
-                //TODO - needed?
-            }
-        });
-    }
-
-    function onSeeMore(id) {
-        var apartment = apartments.find(a => a.ID == id);
-
-        $('#modelStreet').text(apartment.street);
-        $("#modelNumber").text(apartment.houseNumber);
-        $("#modelPrice").text(apartment.price);
-        $("#modelSize").text(apartment.size);
-        $("#modelRooms").text(apartment.roomsNumber);
-        $("#modelFloor").text(apartment.floor);
-        $("#modelCityTax").text(apartment.cityTax);
-        $("#modelBuildingTax").text(apartment.BuildingTax);
-        $("#modelCity").text(apartment.cityName);
-        $("#modelRenovated").text(apartment.isRenovatetd ? "✓" : "✗");
-        $("#modelPets").text(apartment.arePetsAllowed ? "✓" : "✗");
-        $("#modelElevator").text(apartment.isThereElivator ? "✓" : "✗");
-        $("#modelFurniture").text(apartment.furnitureInculded ? "✓" : "✗");
-        $("#modelDate").text(apartment.EnterDate.slice(0, 10));
-        $("#modelOwnerName").text(apartment.firstName + " " + apartment.lastName);
-
-    }
-
-    // Makes life easier for tableBuilder function
-    String.prototype.format = function (args) {
-        var str = this;
-        return str.replace(String.prototype.format.regex, function (item) {
-            var intVal = parseInt(item.substring(1, item.length - 1));
-            var replace;
-            if (intVal >= 0) {
-                replace = args[intVal];
-            } else if (intVal === -1) {
-                replace = "{";
-            } else if (intVal === -2) {
-                replace = "}";
-            } else {
-                replace = "";
-            }
-            return replace;
-        });
-    };
-    String.prototype.format.regex = new RegExp("{-?[0-9]+}", "g");
-</script>
 <form>
     <div class="form-group">
         <label for="Region">Which Region?</label>
@@ -137,7 +30,7 @@
     <input type="button" class="btn btn-success btn-lg" onclick="onSearch()" value="Search" />
 </form>
 
-<table id="apartmentsTable" class="table">
+<table id="apartmentsTable" style="display: none" class="table">
     <thead>
         <tr>
             <th>
@@ -163,15 +56,18 @@
     <tbody id="tableBody"></tbody>
 </table>
 
+
+
 <!-- Modal -->
 <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Apartment Details</h5>
+                <h3 class="modal-title" id="exampleModalLongTitle">Apartment Details</h3>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
+                <div id="map" style="width: 97%;height: 200px;position: sticky;"></div>
             </div>
             <div class="modal-body">
                 <table class="table">
@@ -243,9 +139,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                        <tr style="text-align: left;">
                             <td id="modelOwnerName"></td>
-                            <td><button type="button" class="btn btn-primary">Contact Owner</button></td>
+                            <td id="modelOwnerRate"></td>
+                            <td style="text-align: right;">
+                                <button id="modalContact" type="button" data-toggle='modal' data-target='#compose-modal' data-dismiss="modal" class="btn btn-primary">Contact Owner</button>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -254,7 +153,43 @@
     </div>
 </div>
 
+<div class="modal fade" id="compose-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Compose</h4>
+            </div>
+            <form id="composeForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <input type="email" class="form-control" id="composeReplyEmail" placeholder="Your email address" required />
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="composeSubject" placeholder="Subject" required />
+                    </div>
+
+                    <div class="form-group">
+                        <textarea class="form-control" id="composeMessage" placeholder="Message" rows="10" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" id="send-button" class="btn btn-primary">Send</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 @section Scripts{
-<script src="~/js//canvas.js"></script>
+    <script type="text/javascript" src="https://cdn.emailjs.com/sdk/2.2.4/email.min.js"></script>
+    <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?key=AlNQea4USaYJiJV4kPGxdLToVtMi7j8YKvoc3CfzjJN0ZVDkyHT809I5wOvQeMdE'></script>
+    <script src="~/js//apartmentView.js"></script>
+    <script src="~/js//map.js"></script>
+    <script src="~/js//mail.js"></script>
+
 }

@@ -54,7 +54,7 @@ namespace RentAHouse.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,date")] ApartmentViews apartmentViews)
+        public async Task<IActionResult> Create(ApartmentViews apartmentViews)
         {
             if (ModelState.IsValid)
             {
@@ -148,6 +148,18 @@ namespace RentAHouse.Controllers
         private bool ApartmentViewsExists(int id)
         {
             return _context.ApartmentViews.Any(e => e.ID == id);
+        }
+
+        [HttpPost]
+        public async void addClick(int apartment)
+        {
+            ApartmentViews view = new ApartmentViews();
+            view.apartment = _context.Apartment.Where(i => i.ID == apartment).ToList()[0];
+            view.date = DateTime.Today;
+
+            Create(view);
+            //_context.Add(view);
+            //await _context.SaveChangesAsync();
         }
     }
 }
