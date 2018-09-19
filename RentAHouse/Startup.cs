@@ -41,7 +41,14 @@ namespace RentAHouse
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-             services.AddDefaultIdentity<IdentityUser>().AddRoles<IdentityRole>()
+             //services.AddDefaultIdentity<IdentityUser>().AddRoles<IdentityRole>()
+
+
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddRoleManager<RoleManager<IdentityRole>>()
+                .AddUserManager<UserManager<IdentityUser>>()
+                .AddDefaultUI()
+                .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
 
