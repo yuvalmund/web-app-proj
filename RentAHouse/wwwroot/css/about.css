@@ -4,3 +4,12 @@ video {
     margin-right: auto;
     display: block;
 }
+
+@font-face {
+    font-family: rentAHouseFont;
+    src: url("../font/Alef-Regular.ttf")
+}
+
+h4 {
+    font-family: rentAHouseFont;
+}

@@ -1,0 +1,8 @@
+﻿#search {
+    text-shadow: 2px 2px black;
+    border-radius: 6px;
+}
+
+.title {
+    transform: scaleY(1.5) !important;
+}
