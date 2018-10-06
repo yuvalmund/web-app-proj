@@ -4,7 +4,6 @@
     ViewData["Title"] = "Create";
 
 }
-
 <h2>Add Apartment</h2>
 <hr />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -109,21 +108,15 @@
                 <h4 class="modal-title">Let your friends know about it!</h4>
             </div>
             <div class="modal-footer">
-                <div id="shareBtn" class="btn btn-success clearfix" onclick="share()">Share On Facebook!</div>
+                <a href="https://twitter.com/intent/tweet?button_hashtag=RentAHouse&ref_src=twsrc%5Etfw" class="twitter-hashtag-button" data-show-count="false">Tweet #RentAHouse</a>
+                <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src="~/js//facebook.js"></script>
-}
-
     <script>
-
-
         $(document).ready(function () {
             $.post('/Apartments/GetAllCites', function (data, status) {
                 var cityArray = JSON.parse(data);
