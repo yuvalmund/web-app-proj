@@ -13,9 +13,9 @@ namespace RentAHouse.ML
         // Make sure the 'Copy to Output Directory' property of the text file
         // is set to 'Copy always' (text file should just be imported
         // to the project directiry here
-        public const string DATA_PATH = "./Data/ApartmentsData.csv";
-        public const string MODEL_PATH = "./Data/Model.zip";
-        public const string TEST_DATA_PATH = "./Data/testData.csv";
+        public const string DATA_PATH = "./ML/Data/trainData.csv";
+        public const string MODEL_PATH = "./ML/Data/Model.zip";
+        public const string TEST_DATA_PATH = "./ML/Data/testData.csv";
 
         /*
          * EXPLENATION:
@@ -35,6 +35,17 @@ namespace RentAHouse.ML
 
                 // Define the price column as the one to be predicted
                 new ColumnCopier(("price", "Label")),
+
+                // Assign the boolean features a numeric value
+                new CategoricalOneHotVectorizer("cityID",
+                                                "cityAvarageSalary",
+                                                "region",
+                                                "cityGraduatesPercent",
+                                                "RoomsNumber",
+                                                "sizeInMeters",
+                                                "isThereElivator",
+                                                "furnitureInculded",
+                                                "isRenovated"),
 
                 // Put all features into a vector
                 new ColumnConcatenator(

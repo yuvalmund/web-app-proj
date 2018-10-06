@@ -25,16 +25,16 @@ namespace RentAHouse.ML
         [Column("5")]
         public int sizeInMeters;
 
-        [Column("5")]
+        [Column("6")]
         public bool isThereElivator;
 
-        [Column("6")]
+        [Column("7")]
         public bool furnitureInculded;
 
-        [Column("7")]
+        [Column("8")]
         public bool isRenovated;
 
-        [Column("8")]
-        public int price;
+        [Column("9")]
+        public float price;
     }
 }

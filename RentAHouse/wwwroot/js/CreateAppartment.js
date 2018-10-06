@@ -62,12 +62,12 @@ function onSuggestPrice() {
         $.ajax({
             url: '/ML/predict',
             data: {
-                "cityID": city.val(),
-                "RoomsNumber": roomsNumber.val(),
-                "sizeInMeters": size.val(),
-                "isThereElivator": $("#isThereElivator").val(),
-                "isThereParkingPlace": $("#furnitureInculded").val(),
-                "isRenovated": $("#isRenoveted").val()
+                "inCityID": city.val(),
+                "inRoomsNumber": roomsNumber.val(),
+                "inSizeInMeters": size.val(),
+                "inIsThereElivator": $("#isThereElivator").val(),
+                "inFurnitureInculded": $("#furnitureInculded").val(),
+                "inIsRenovated": $("#isRenoveted").val()
             },
             type: "GET",
             success: function (response) {

@@ -21,9 +21,10 @@ namespace RentAHouse.Controllers
 
         private readonly ApplicationDbContext _context;
 
-        public MLController(IConfiguration configuration)
+        public MLController(ApplicationDbContext context, IConfiguration configuration)
         {
             this.Configuration = configuration;
+            _context = context;
         }
 
         public void createCSVFiles()
@@ -33,7 +34,7 @@ namespace RentAHouse.Controllers
             using (SqlConnection con = new SqlConnection(constr))
             {
                 using (SqlCommand cmd = new SqlCommand(
-                    "SELECT ct.ID, ct.avarageSalary, ct.region, ct.GraduatesPercents,ap.roomsNumber, ap.size, ap.isRenovatetd, ap.isThereElivator, ap.furnitureInculded, ap.price FROM dbo.Apartment ap, dbo.City ct where ct.ID = ap.cityID"))
+                    "SELECT ct.ID, ct.avarageSalary, ct.region, ct.GraduatesPercents,ap.roomsNumber, ap.size, ap.isThereElivator, ap.furnitureInculded, ap.isRenovatetd, ap.price FROM dbo.Apartment ap, dbo.City ct where ct.ID = ap.cityID"))
                 {
                     using (SqlDataAdapter sda = new SqlDataAdapter())
                     {
@@ -44,44 +45,41 @@ namespace RentAHouse.Controllers
                             sda.Fill(dt);
 
                             //Build the CSV file data as a Comma separated string.
-                            string trainCSV = string.Empty;
+                            string[] CSVs = new string[2];
+                            CSVs[0] = string.Empty;
+                            CSVs[1] = string.Empty;
 
                             foreach (DataColumn column in dt.Columns)
                             {
                                 //Add the Header row for CSV file.
-                                trainCSV += column.ColumnName + ',';
+                                CSVs[0] += column.ColumnName + ',';
+                                CSVs[1] += column.ColumnName + ',';
                             }
 
                             //Add new line.
-                            trainCSV += "\r\n";
+                            CSVs[0] += "\r\n";
+                            CSVs[1] += "\r\n";
 
                             Random rnd = new Random();
-                            string currCSV;
-
-                            // Create a matching tesh CSV
-                            string testCSV = trainCSV.Substring(0, trainCSV.Length);
 
                             foreach (DataRow row in dt.Rows)
                             {
                                 // Randomly decide which CSV to add it to
-                                if (rnd.Next(0, 2) > 0)
-                                    currCSV = trainCSV;
-                                else
-                                    currCSV = testCSV;
+                                int nIndex = rnd.Next(0, 2);
 
                                 foreach (DataColumn column in dt.Columns)
                                 {
                                     //Add the Data rows.
-                                    currCSV += row[column.ColumnName].ToString().Replace(",", ";") + ',';
+                                    CSVs[nIndex] += row[column.ColumnName].ToString().Replace(",", ";") + ',';
                                 }
 
                                 //Add new line.
-                                currCSV += "\r\n";
+                                CSVs[nIndex] += "\r\n";
                             }
 
                             //Download the CSV files.
-                            System.IO.File.WriteAllText("ML\\Data\\trainData.csv", trainCSV);
-                            System.IO.File.WriteAllText("ML\\Data\\testData.csv", testCSV);
+                            System.IO.File.WriteAllText("ML\\Data\\trainData.csv", CSVs[0]);
+                            System.IO.File.WriteAllText("ML\\Data\\testData.csv", CSVs[0]);
                         }
                     }
                 }
@@ -98,22 +96,16 @@ namespace RentAHouse.Controllers
             return ML.ModelBuilder.Evaluate(model);
         }
 
-
         [HttpGet]
         public async Task<string> predict(int inCityID,
-                              float inCityAvarageSalary,
-                              int inRegion,
-                              float inCityGraduatesPercent,
                               int inRoomsNumber,
                               int inSizeInMeters,
                               bool inIsThereElivator,
                               bool inFurnitureInculded,
                               bool inIsRenovated)
         {
-
             Models.City currCity = _context.City.Where(c => c.ID == inCityID).First();
-
-
+  
             ML.ApartmentData newExample = new ML.ApartmentData
             {
                 cityID = inCityID,
@@ -127,9 +119,12 @@ namespace RentAHouse.Controllers
                 isRenovated = inIsRenovated
             };
 
+            if (this.model == null)
+                this.TrainModel();
+
             ML.AppartmentPricePrediction prediction = this.model.Predict(newExample);
 
-            return prediction.ToString();
+            return prediction.price.ToString();
         }
     }
 }
