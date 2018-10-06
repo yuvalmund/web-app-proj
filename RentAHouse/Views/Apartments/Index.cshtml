@@ -4,7 +4,9 @@
 @{
     ViewData["Title"] = "Index";
 }
-<h2>Search for your next house</h2>
+
+<h2 class="title">Search for your next house</h2>
+
 
 <form>
     <div class="form-group">
@@ -17,17 +19,17 @@
     </div>
     <div class="form-group">
         <label for="RoomNumber">How many rooms?</label>
-        <input type="number" class="form-control" id="roomNum">
+        <input type="number" min="1" class="form-control" id="roomNum">
     </div>
     <div class="form-group">
         <label for="minPrice">Minimum price</label>
-        <input type="number" class="form-control" id="minPrice">
+        <input type="number" min="0" class="form-control" id="minPrice">
     </div>
     <div class="form-group">
         <label for="maxPrice">Maximum price</label>
-        <input type="number" class="form-control" id="maxPrice">
+        <input type="number" min="1" class="form-control" id="maxPrice">
     </div>
-    <input type="button" class="btn btn-success btn-lg" onclick="onSearch()" value="Search" />
+    <input type="button" id="search" class="btn btn-success btn-lg" onclick="onSearch()" value="Search" />
 </form>
 
 <table id="apartmentsTable" style="display: none" class="table">
@@ -185,11 +187,14 @@
     </div>
 </div>
 
+@* scripts *@
 @section Scripts{
     <script type="text/javascript" src="https://cdn.emailjs.com/sdk/2.2.4/email.min.js"></script>
     <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?key=AlNQea4USaYJiJV4kPGxdLToVtMi7j8YKvoc3CfzjJN0ZVDkyHT809I5wOvQeMdE'></script>
     <script src="~/js//apartmentView.js"></script>
     <script src="~/js//map.js"></script>
     <script src="~/js//mail.js"></script>
-
 }
+
+@* css *@
+<link rel="stylesheet" href="~/css/seachApartment.css" />

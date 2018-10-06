@@ -1,11 +1,23 @@
 ﻿@{
     ViewData["Title"] = "About";
 }
-<link rel="stylesheet" href="~/css/about.css" />
 <video autoplay="autoplay" width="70%" height="15%" controls>
     <source src="~/images/intro.mp4" type="video/mp4">
     <source src="movie.ogg" type="video/ogg">
     Your browser does not support the video tag.
 </video>
 
-<p>Bla bla ........... (TODO)</p>
+<br />
+<center> <h4> Apartments per city</h4> </center>
+<svg id="graphPie" class="center-block" width="960" height="500"></svg>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+
+@* scripts *@
+@section Scripts{
+    <script src="~/js//about.js"></script>
+}
+
+@* css *@
+{
+    <link rel="stylesheet" href="~/css/about.css" />
+}

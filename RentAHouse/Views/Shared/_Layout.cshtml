@@ -33,7 +33,7 @@
                     <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
                     <li><a asp-area="" asp-controller="Apartments" asp-action="Create">Add Apartment</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Search">Search a house</a></li>
+                    
                 </ul>
                 <partial name="_LoginPartial" />
             </div>
@@ -46,20 +46,16 @@
         @RenderBody()
         <hr />
         <footer>
-            <div class="row">
-                <div class="col-md-3">
-                    <h2>Contact us</h2>
-                    <ul>
-                        <li><a href="https://go.microsoft.com/fwlink/?LinkId=518008">Via mail</a></li>
-                        <li><a href="https://go.microsoft.com/fwlink/?LinkId=518008">Via phone</a></li>
-
-
-                    </ul>
-                </div>
-                <div class="col-md-3" style="text-align: right;width: 70%;">
-                    <canvas id="myCanvas" width="200" height="100"></canvas>
-                    <p>&copy; 2018 - RentAHouse</p>
-                </div>
+            <div>   
+                <h2>Contact us</h2>
+                <ul>
+                    <li><a href="https://go.microsoft.com/fwlink/?LinkId=518008">Via mail</a></li>
+                    <li><a href="https://go.microsoft.com/fwlink/?LinkId=518008">Via phone</a></li>
+                </ul>
+            </div>
+            <div style="text-align: right;">  
+                <canvas id="myCanvas" width="200" height="100"></canvas>
+                <p>&copy; 2018 - RentAHouse</p>
             </div>
         </footer>
     </div>

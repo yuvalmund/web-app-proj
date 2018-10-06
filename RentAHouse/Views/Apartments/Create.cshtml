@@ -4,15 +4,12 @@
     ViewData["Title"] = "Create";
 
 }
-
 <h2>Add Apartment</h2>
-
-<h4>Apartment</h4>
 <hr />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create" enctype="multipart/form-data">
+        <form asp-action="Create" id="createForm" enctype="multipart/form-data" onsubmit="send()">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="city" class="control-label"></label>
@@ -26,27 +23,27 @@
             </div>
             <div class="form-group">
                 <label asp-for="houseNumber" class="control-label"></label>
-                <input asp-for="houseNumber" class="form-control" />
+                <input asp-for="houseNumber" min="1" class="form-control" />
                 <span asp-validation-for="houseNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="roomsNumber" class="control-label"></label>
-                <input asp-for="roomsNumber" id="roomsNumber" class="form-control" />
+                <input asp-for="roomsNumber" min="1" id="roomsNumber" class="form-control" />
                 <span asp-validation-for="roomsNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="size" class="control-label"></label>
-                <input asp-for="size" id="size" class="form-control" />
+                <input asp-for="size" id="size" min="1" class="form-control" />
                 <span asp-validation-for="size" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="cityTax" class="control-label"></label>
-                <input asp-for="cityTax" class="form-control" />
+                <input asp-for="cityTax" min="0" class="form-control" />
                 <span asp-validation-for="cityTax" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="BuildingTax" class="control-label"></label>
-                <input asp-for="BuildingTax" class="form-control" />
+                <input asp-for="BuildingTax" min="0" class="form-control" />
                 <span asp-validation-for="BuildingTax" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -84,7 +81,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="floor" class="control-label"></label>
-                <input asp-for="floor" class="form-control" />
+                <input asp-for="floor" min="0" class="form-control" />
                 <span asp-validation-for="floor" class="text-danger"></span>
             </div>
             <div class="form-group">

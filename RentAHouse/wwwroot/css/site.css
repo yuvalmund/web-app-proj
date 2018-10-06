@@ -40,3 +40,7 @@ video {
     margin-right: auto;
     display: block;
 }
+
+footer {
+    column-count: 2;
+}
