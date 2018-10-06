@@ -17,15 +17,15 @@
     </div>
     <div class="form-group">
         <label for="RoomNumber">How many rooms?</label>
-        <input type="number" class="form-control" id="roomNum">
+        <input type="number" min="1" class="form-control" id="roomNum">
     </div>
     <div class="form-group">
         <label for="minPrice">Minimum price</label>
-        <input type="number" class="form-control" id="minPrice">
+        <input type="number" min="0" class="form-control" id="minPrice">
     </div>
     <div class="form-group">
         <label for="maxPrice">Maximum price</label>
-        <input type="number" class="form-control" id="maxPrice">
+        <input type="number" min="1" class="form-control" id="maxPrice">
     </div>
     <input type="button" class="btn btn-success btn-lg" onclick="onSearch()" value="Search" />
 </form>
