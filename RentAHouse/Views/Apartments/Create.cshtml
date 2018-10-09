@@ -54,14 +54,7 @@
             <div class="form-group">
                 <div class="checkbox">
                     <label>
-                        <input asp-for="furnitureInculded" /> @Html.DisplayNameFor(model => model.furnitureInculded)
-                    </label>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="checkbox">
-                    <label>
-                        <input asp-for="isRenovatetd" /> @Html.DisplayNameFor(model => model.isRenovatetd)
+                        <input asp-for="isRenovatetd" id="isRenoveted" /> @Html.DisplayNameFor(model => model.isRenovatetd)
                     </label>
                 </div>
             </div>
@@ -75,7 +68,14 @@
             <div class="form-group">
                 <div class="checkbox">
                     <label>
-                        <input asp-for="isThereElivator" /> @Html.DisplayNameFor(model => model.isThereElivator)
+                        <input asp-for="isThereElivator" id="isThereElivator" /> @Html.DisplayNameFor(model => model.isThereElivator)
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="furnitureInculded" id="furnitureInculded" /> @Html.DisplayNameFor(model => model.furnitureInculded)
                     </label>
                 </div>
             </div>
@@ -86,10 +86,14 @@
             </div>
             <div class="form-group">
                 <label asp-for="floor" class="control-label"></label>
-                <input asp-for="floor" min="1" class="form-control" required/>
+                <input asp-for="floor" min="0" class="form-control" required/>
                 <span asp-validation-for="floor" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="price" class="control-label"></label>
+                <input asp-for="price" id="price" class="form-control" />
+                <input type="button" id="suggestPriceButton" value="Suggest Price" class="btn btn-default" />
+                <span asp-validation-for="price" class="text-danger"></span>
                 @*<input type="submit" value="Create" data-toggle='modal' data-target='#shareModal' class="btn btn-default" />*@
                 <input type="submit" value="Create" class="btn btn-default" />
             </div>
@@ -97,24 +101,6 @@
     </div>
 </div>
 
-<h2 id="finishMessage" class="hidden">Completed!</h2>
-
-<div class="modal fade" id="shareModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title">Let your friends know about it!</h4>
-            </div>
-            <div class="modal-footer">
-                <a href="https://twitter.com/intent/tweet?button_hashtag=RentAHouse&ref_src=twsrc%5Etfw" class="twitter-hashtag-button" data-show-count="false">Tweet #RentAHouse</a>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>

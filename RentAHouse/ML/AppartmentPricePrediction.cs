@@ -7,7 +7,7 @@ namespace RentAHouse.ML
 {
     public class AppartmentPricePrediction
     {
-        [ColumnName("predictedLabel")]
-        public int predictedPrice;
+        [ColumnName("Score")]
+        public float price;
     }
 }

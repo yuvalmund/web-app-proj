@@ -76,6 +76,7 @@ namespace RentAHouse
             app.UseAuthentication();
 
             Roles.RolesData.SeedRoles(roleManager).Wait();
+            createCSV();
 
             app.UseMvc(routes =>
             {
@@ -83,8 +84,13 @@ namespace RentAHouse
                     name: "default",
                     template: "{controller=Apartments}/{action=Index}/{id?}");
             });
+        }
 
-            string constr = Configuration.GetConnectionString("DefaultConnection"); ;
+        
+        public void createCSV()
+        {
+            // Create CSV for ML
+            string constr = Configuration.GetConnectionString("DefaultConnection");
             using (SqlConnection con = new SqlConnection(constr))
             {
                 using (SqlCommand cmd = new SqlCommand("SELECT ct.ID, ct.avarageSalary, ct.region, ct.GraduatesPercents,ap.roomsNumber, ap.size, ap.isRenovatetd, ap.price FROM dbo.Apartment ap, dbo.City ct where ct.ID = ap.cityID"))
@@ -98,36 +104,50 @@ namespace RentAHouse
                             sda.Fill(dt);
 
                             //Build the CSV file data as a Comma separated string.
-                            string csv = string.Empty;
+                            string trainCSV = string.Empty;
 
                             foreach (DataColumn column in dt.Columns)
                             {
                                 //Add the Header row for CSV file.
-                                csv += column.ColumnName + ',';
+                                trainCSV += column.ColumnName + ',';
                             }
 
                             //Add new line.
-                            csv += "\r\n";
+                            trainCSV += "\r\n";
+
+                            Random rnd = new Random();
+                            string currCSV;
+
+                            // Create a matching tesh CSV
+                            string testCSV = trainCSV.Substring(0, trainCSV.Length);
 
                             foreach (DataRow row in dt.Rows)
                             {
+                                // Randomly decide which CSV to add it to
+                                if (rnd.Next(0, 2) > 0)
+                                    currCSV = trainCSV;
+                                else
+                                    currCSV = testCSV;
+
                                 foreach (DataColumn column in dt.Columns)
                                 {
                                     //Add the Data rows.
-                                    csv += row[column.ColumnName].ToString().Replace(",", ";") + ',';
+                                    currCSV += row[column.ColumnName].ToString().Replace(",", ";") + ',';
                                 }
 
                                 //Add new line.
-                                csv += "\r\n";
+                                currCSV += "\r\n";
                             }
 
-                            //Download the CSV file.
-                            File.WriteAllText("ML\\data.csv", csv);
+                            //Download the CSV files.
+                            File.WriteAllText("ML\\Data\\trainData.csv", trainCSV);
+                            File.WriteAllText("ML\\Data\\testData.csv", testCSV);
                         }
                     }
                 }
             }
 
+            // Create CSV for graphs
             using (SqlConnection con = new SqlConnection(constr))
             {
                 using (SqlCommand cmd = new SqlCommand("SELECT count(apartmentID) click, date from dbo.ApartmentViews group by date"))

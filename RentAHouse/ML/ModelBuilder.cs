@@ -13,9 +13,9 @@ namespace RentAHouse.ML
         // Make sure the 'Copy to Output Directory' property of the text file
         // is set to 'Copy always' (text file should just be imported
         // to the project directiry here
-        public const string DATA_PATH = "./Data/ApartmentsData.csv";
-        public const string MODEL_PATH = "./Data/Model.zip";
-        public const string TEST_DATA_PATH = "./Data/testData.csv";
+        public const string DATA_PATH = "./ML/Data/trainData.csv";
+        public const string MODEL_PATH = "./ML/Data/Model.zip";
+        public const string TEST_DATA_PATH = "./ML/Data/testData.csv";
 
         /*
          * EXPLENATION:
@@ -36,6 +36,17 @@ namespace RentAHouse.ML
                 // Define the price column as the one to be predicted
                 new ColumnCopier(("price", "Label")),
 
+                // Assign the boolean features a numeric value
+                new CategoricalOneHotVectorizer("cityID",
+                                                "cityAvarageSalary",
+                                                "region",
+                                                "cityGraduatesPercent",
+                                                "RoomsNumber",
+                                                "sizeInMeters",
+                                                "isThereElivator",
+                                                "furnitureInculded",
+                                                "isRenovated"),
+
                 // Put all features into a vector
                 new ColumnConcatenator(
                 "Features",
@@ -46,7 +57,7 @@ namespace RentAHouse.ML
                 "RoomsNumber",
                 "sizeInMeters",
                 "isThereElivator",
-                "isThereParkingPlace",
+                "furnitureInculded",
                 "isRenovated"),
 
                 // Add  learning algorithm to the pipeline 
@@ -66,7 +77,7 @@ namespace RentAHouse.ML
             return model;
         }
 
-        private static void Evaluate(PredictionModel<ApartmentData, AppartmentPricePrediction> model)
+        public static string Evaluate(PredictionModel<ApartmentData, AppartmentPricePrediction> model)
         {
             // Load the test data from a file
             var testData = new TextLoader(TEST_DATA_PATH).CreateFrom<ApartmentData>(separator: ',');
@@ -78,8 +89,7 @@ namespace RentAHouse.ML
             // Print the RMS and RSquared are evaluation matrixes of the regression model
             // RMS: The lower it is, the better the model is
             // RSquared: takes values between 0 and 1. The closer its value is to 1, the better the model is. 
-            Console.WriteLine($"Rms = {metrics.Rms}");
-            Console.WriteLine($"RSquared = {metrics.RSquared}");
+            return ($"Rms = {metrics.Rms}" + $", RSquared = {metrics.RSquared}");
         }
     }
 }
