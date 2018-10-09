@@ -45,29 +45,6 @@ form.submit(function (e) {
 });
 
 function onSuggestPrice() {
-    let errorMessage = "";
-
-    $("#mustSpecify").remove();
-
-    errorMessage = "";
-
-    let city = $("#selectCity");
-    let roomsNumber = $("#roomsNumber");
-    let size = $("#size");
-
-    if (!city) {
-        errorMessage += ", city";
-    }
-    if (!roomsNumber) {
-        errorMessage += ", number of rooms"
-    }
-    if (!size) {
-        errorMessage += ", size"
-    }
-    if (errorMessage)
-        this.append('<span id="mustSpecify">You must Specify ' +
-            errorMessage[2, errorMessage.length] + '</span>');
-    else {
         $.ajax({
             url: '/ML/predict',
             data: {
@@ -83,5 +60,4 @@ function onSuggestPrice() {
                 $("#price").val(response);
             }
         });
-    }
 }
