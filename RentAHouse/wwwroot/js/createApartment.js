@@ -35,6 +35,15 @@ function send() {
         });
 }
 
+var form = $("#createForm");
+form.submit(function (e) {
+    if (form[0].checkValidity()) {
+        e.preventDefault();
+        this.classList.add("hidden");
+        $("#finishMessage").removeClass("hidden");
+    }
+});
+
 function onSuggestPrice() {
     let errorMessage = "";
 
