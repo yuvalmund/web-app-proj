@@ -11,12 +11,13 @@ using System.Data.SqlClient;
 using System.Data;
 using System.IO;
 using RentAHouse.Data;
+using RentAHouse.ML;
 
 namespace RentAHouse.Controllers
 {
     public class MLController : Controller
     {
-        public PredictionModel<ML.ApartmentData, ML.AppartmentPricePrediction> model;
+
         private IConfiguration Configuration;
 
         private readonly ApplicationDbContext _context;
@@ -70,7 +71,7 @@ namespace RentAHouse.Controllers
                                 foreach (DataColumn column in dt.Columns)
                                 {
                                     //Add the Data rows.
-                                    CSVs[nIndex] += row[column.ColumnName].ToString().Replace(",", ";") + ',';
+                                    CSVs[nIndex] += (int.Parse(row[column.ColumnName].ToString().Replace("False",  "0").Replace("True", "1"))).ToString() + ',';
                                 }
 
                                 //Add new line.
@@ -91,9 +92,17 @@ namespace RentAHouse.Controllers
         public async Task<string> TrainModel()
         {
             this.createCSVFiles();
-            this.model = await ML.ModelBuilder.Train();
+            try
+            {
+                PredictionModel<ML.ApartmentData, ML.AppartmentPricePrediction> model = await ML.ModelBuilder.Train();
 
-            return ML.ModelBuilder.Evaluate(model);
+                return ML.ModelBuilder.Evaluate(model);
+            }
+            catch (Exception err)
+            {
+                var x = 1;
+                return "1";
+            }
         }
 
         [HttpGet]
@@ -119,12 +128,11 @@ namespace RentAHouse.Controllers
                 isRenovated = inIsRenovated
             };
 
-            if (this.model == null)
-                this.TrainModel();
+            var model = await PredictionModel.ReadAsync<ApartmentData, AppartmentPricePrediction>(ModelBuilder.MODEL_PATH);
 
-            ML.AppartmentPricePrediction prediction = this.model.Predict(newExample);
+            ML.AppartmentPricePrediction prediction = model.Predict(newExample);
 
-            return prediction.price.ToString();
+            return ((int)prediction.price).ToString();
         }
     }
 }
