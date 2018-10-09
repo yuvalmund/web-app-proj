@@ -8,8 +8,11 @@
         cityArray.forEach(function (city) {
             sel.append($("<option>").attr('value', city.ID).text(city.cityName));
         });
+
+        $("#suggestPriceButton").click(onSuggestPrice);
     });
 });
+
 function send() {
     $.post('/Apartments/Create',
         {
@@ -40,3 +43,45 @@ form.submit(function (e) {
         $("#finishMessage").removeClass("hidden");
     }
 });
+
+function onSuggestPrice() {
+    let errorMessage = "";
+
+    $("#mustSpecify").remove();
+
+    errorMessage = "";
+
+    let city = $("#selectCity");
+    let roomsNumber = $("#roomsNumber");
+    let size = $("#size");
+
+    if (!city) {
+        errorMessage += ", city";
+    }
+    if (!roomsNumber) {
+        errorMessage += ", number of rooms"
+    }
+    if (!size) {
+        errorMessage += ", size"
+    }
+    if (errorMessage)
+        this.append('<span id="mustSpecify">You must Specify ' +
+            errorMessage[2, errorMessage.length] + '</span>');
+    else {
+        $.ajax({
+            url: '/ML/predict',
+            data: {
+                "inCityID": city.val(),
+                "inRoomsNumber": roomsNumber.val(),
+                "inSizeInMeters": size.val(),
+                "inIsThereElivator": $("#isThereElivator").val(),
+                "inFurnitureInculded": $("#furnitureInculded").val(),
+                "inIsRenovated": $("#isRenoveted").val()
+            },
+            type: "GET",
+            success: function (response) {
+                $("#price").val(response);
+            }
+        });
+    }
+}
