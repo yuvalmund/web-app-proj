@@ -135,7 +135,7 @@ namespace RentAHouse.Controllers
         }
 
         // GET: Apartments/Create
-        
+        [Authorize]
         public IActionResult Create()
         {
             return View();
@@ -162,6 +162,7 @@ namespace RentAHouse.Controllers
 
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Create(string city, string street, int houseNumber, int roomsNumber, int size,int price,int cityTax,int BuildingTax,bool furnitureInculded,bool isRenovatetd,bool arePetsAllowed,bool isThereElivator,DateTime EnterDate,int floor)
         {
             Apartment apartment = new Apartment();
@@ -232,6 +233,7 @@ namespace RentAHouse.Controllers
         }
 
         // GET: Apartments/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -252,6 +254,7 @@ namespace RentAHouse.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Edit(int id, [Bind("ID,street,houseNumber,roomsNumber,size,price,cityTax,BuildingTax,furnitureInculded,isRenovatetd,arePetsAllowed,isThereElivator,EnterDate,floor")] Apartment apartment)
         {
             if (id != apartment.ID)
@@ -283,6 +286,7 @@ namespace RentAHouse.Controllers
         }
 
         // GET: Apartments/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -303,6 +307,7 @@ namespace RentAHouse.Controllers
         // POST: Apartments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var apartment = await _context.Apartment.FindAsync(id);
