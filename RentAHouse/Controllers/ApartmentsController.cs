@@ -31,6 +31,13 @@ namespace RentAHouse.Controllers
             return View(await _context.Apartment.ToListAsync());
         }
 
+        // GET: Apartments
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Admin()
+        {
+            return View(await _context.Apartment.ToListAsync());
+        }
+
 
         [HttpGet]
         public string GetCities(int region)
@@ -111,6 +118,7 @@ namespace RentAHouse.Controllers
         }
 
         // GET: Apartments/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -208,6 +216,7 @@ namespace RentAHouse.Controllers
 
         // GET: Apartments/Edit/5
         [Authorize]
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -260,6 +269,7 @@ namespace RentAHouse.Controllers
         }
 
         // GET: Apartments/Delete/5
+        [Authorize]
         [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
