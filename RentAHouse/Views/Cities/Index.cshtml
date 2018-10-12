@@ -1,4 +1,4 @@
-﻿@model IEnumerable<RentAHouse.Models.Apartment>
+﻿@model IEnumerable<RentAHouse.Models.City>
 
 @{
     ViewData["Title"] = "Index";
@@ -9,94 +9,61 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+<form asp-action="Details">
+    <input type="text" name="name" placeholder="City name" />
+    <input type="submit" class="btn" value="Search"/>
+</form>
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.street)
+                @Html.DisplayNameFor(model => model.cityName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.houseNumber)
+                @Html.DisplayNameFor(model => model.GraduatesPercents)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.roomsNumber)
+                @Html.DisplayNameFor(model => model.mayor)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.size)
+                @Html.DisplayNameFor(model => model.avarageSalary)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.price)
+                @Html.DisplayNameFor(model => model.numOfResidents)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.cityTax)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BuildingTax)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.furnitureInculded)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.isRenovatetd)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.arePetsAllowed)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.isThereElivator)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.floor)
+                @Html.DisplayNameFor(model => model.region)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.street)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.houseNumber)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.roomsNumber)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.size)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.price)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.cityTax)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.BuildingTax)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.furnitureInculded)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.isRenovatetd)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.arePetsAllowed)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.isThereElivator)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.floor)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-                </td>
-            </tr>
-        }
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.cityName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GraduatesPercents)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.mayor)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.avarageSalary)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.numOfResidents)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.region)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+            </td>
+        </tr>
+}
     </tbody>
 </table>
