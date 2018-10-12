@@ -12,6 +12,7 @@ using System.Data;
 using System.IO;
 using RentAHouse.Data;
 using RentAHouse.ML;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RentAHouse.Controllers
 {
@@ -28,6 +29,7 @@ namespace RentAHouse.Controllers
             _context = context;
         }
 
+        [Authorize(Roles = "Admin")]
         public void createCSVFiles()
         {
             // Create CSV for ML
@@ -89,6 +91,7 @@ namespace RentAHouse.Controllers
 
         // GET: ML
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<string> TrainModel()
         {
             this.createCSVFiles();
