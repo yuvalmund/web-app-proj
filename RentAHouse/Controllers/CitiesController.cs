@@ -21,12 +21,14 @@ namespace RentAHouse.Controllers
         }
 
         // GET: Cities
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             return View(await _context.City.ToListAsync());
         }
 
         // GET: Cities/Details/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -45,7 +47,7 @@ namespace RentAHouse.Controllers
         }
 
         // GET: Cities/Create
-        [Authorize(Roles ="Admin")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
