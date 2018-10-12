@@ -27,17 +27,17 @@ namespace RentAHouse.Controllers
             return View(await _context.City.ToListAsync());
         }
 
-        // GET: Cities/Details/5
+
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(string name)
         {
-            if (id == null)
+            if (name == null)
             {
                 return NotFound();
             }
 
             var city = await _context.City
-                .FirstOrDefaultAsync(m => m.ID == id);
+                .FirstOrDefaultAsync(m => m.cityName == name);
             if (city == null)
             {
                 return NotFound();
