@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using RentAHouse.Data;
 using RentAHouse.Models;
 
@@ -25,6 +26,21 @@ namespace RentAHouse.Controllers
         public async Task<IActionResult> Index()
         {
             return View(await _context.City.ToListAsync());
+        }
+
+        public string getDistrictEnum()
+        {
+                return JsonConvert.SerializeObject(Enum.GetValues(typeof(District)), new Newtonsoft.Json.Converters.StringEnumConverter());
+        }
+
+        [Authorize(Roles = "Admin")]
+        public string GetCitiesBtCriterias(District region, string name, int minNumOfResidents)
+        {
+            var cities = (_context.City.Where(city => (name == null || city.cityName.Contains(name))));
+            cities = cities.Where(city => (region == District.All || city.region == region));
+            cities = cities.Where(city => (city.numOfResidents >= minNumOfResidents));
+
+            return JsonConvert.SerializeObject(cities.ToList<City>());
         }
 
         // GET: Cities/Details/5
