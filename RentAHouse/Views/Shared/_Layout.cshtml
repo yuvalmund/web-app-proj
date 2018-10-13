@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - RentAHouse</title>
 
+    @*Load css*@
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
+        <link rel="stylesheet" href="~/css/footer.css" />
     </environment>
     <environment exclude="Development">
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -17,15 +19,13 @@
     </environment>
 </head>
 <body>
+    @*Add navigation bar*@
     <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
+        <div class="container" style="margin-left:0;">
+            <div class="navbar-header logo">
+                <canvas id="myCanvas" class="myCanvas" width="200" height="100"></canvas>
+            </div>
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
                 <a asp-area="" asp-controller="Apartments" asp-action="Index" class="navbar-brand">RentAHouse</a>
             </div>
             <div class="navbar-collapse collapse">
@@ -34,8 +34,8 @@
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
                     <li><a asp-area="" asp-controller="Apartments" asp-action="Create">Add Apartment</a></li>
 
-                    // Only users in role Admin can see this navs
-                    @if(User.IsInRole("Admin"))
+                    @*Only users in role Admin can see this navs*@
+                    @if (User.IsInRole("Admin"))
                     {
                         <li><a asp-area="" asp-controller="Cities" asp-action="Index">Manage Cities</a></li>
                         <li><a asp-area="" asp-controller="Apartments" asp-action="Admin">Manage Apartments</a></li>
@@ -48,29 +48,53 @@
 
     <partial name="_CookieConsentPartial" />
 
+    @*Add Footer*@
     <div class="container body-content">
         @RenderBody()
         <hr />
-        <footer>
-            <div>   
-                <h2>Contact us</h2>
-                <ul>
-                    <li><a href="https://go.microsoft.com/fwlink/?LinkId=518008">Via mail</a></li>
-                    <li><a href="https://go.microsoft.com/fwlink/?LinkId=518008">Via phone</a></li>
-                </ul>
-            </div>
-            <div style="text-align: right;">  
-                <canvas id="myCanvas" width="200" height="100"></canvas>
-                <p>&copy; 2018 - RentAHouse</p>
-            </div>
-        </footer>
+            <footer class="footer-distributed">
+
+                <div class="footer-left">
+
+                    <h3><span>Rent</span>A<span>House</span></h3>
+
+                    <p class="footer-links">
+                        <a asp-area="" asp-controller="Home" asp-action="About">About</a>
+                        .
+                        <a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a>
+                        .
+                        <a asp-area="" asp-controller="Apartments" asp-action="Create">Add Apartment</a>
+                    </p>
+
+                    <p class="footer-company-name">Yuval, Roni & Ophir &copy; 2018</p>
+                </div>
+
+                <div class="footer-right">
+
+                    <p>Tell us what do you think :)</p>
+                    <form>
+                        <div>
+                            <button onclick="footerMail('♡ ♡ ♡')">♡ ♡ ♡</button>
+                        </div>
+                        <div>
+                            <button onclick="footerMail('♡ ♡')">♡ ♡</button>
+                        </div>
+                        <div>
+                            <button onclick="footerMail('♡')">♡</button>
+                        </div>
+                    </form>
+                </div>
+
+            </footer>
     </div>
 
+    @*Load scripts*@
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script src="~/js//canvas.js" asp-append-version="true"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
+        <script src="~/js/mail.js" asp-append-version="true"></script>
     </environment>
     <environment exclude="Development">
         <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"

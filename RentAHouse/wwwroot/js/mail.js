@@ -7,6 +7,10 @@
     composeTidy()
 });
 
+function footerMail(message){
+    sendMessage("ophir.dobkin@gmail.com", "", "You have a new opinion", message);
+}
+
 function sendMessage(mailTo, mailReplay, subject, message) {
     emailjs.init("user_G7l9i9QIc10uPu3wdpsMB");
 

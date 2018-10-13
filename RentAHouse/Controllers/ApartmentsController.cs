@@ -287,19 +287,6 @@ namespace RentAHouse.Controllers
             return _context.Apartment.Any(e => e.ID == id);
         }
 
-        public void onRegionSelected(int region)
-        {
-            var citiesList = new MultiSelectList(null);
-            if (region == (int)District.All)
-            {
-                citiesList = new MultiSelectList(_context.City.Select(i => i), "ID", "cityName");
-            }
-            else
-            {
-                citiesList = new MultiSelectList(_context.City.Select(i => i.region == (District)region), "ID", "cityName");
-            }
-            ViewBag.Cities = citiesList; 
-        }
 
         [HttpGet]
         public void createCSVs()
@@ -350,6 +337,34 @@ namespace RentAHouse.Controllers
                     }
                 }
             }
+        }
+
+        public string GetApartmentByCity()
+        {
+            var result = from ap in _context.Apartment
+                         join city in _context.City on ap.city.ID equals city.ID
+                         group new
+                         {
+                             ap.ID,
+                             city.cityName,
+                             ap.street,
+                             ap.houseNumber,
+                             ap.roomsNumber,
+                             ap.size,
+                             ap.price,
+                             ap.cityTax,
+                             ap.BuildingTax,
+                             ap.furnitureInculded,
+                             ap.isRenovatetd,
+                             ap.arePetsAllowed,
+                             ap.isThereElivator,
+                             ap.EnterDate,
+                             ap.floor
+                         }
+                         by ap.city.cityName into grouedAps
+                         select grouedAps;
+
+            return JsonConvert.SerializeObject(result);
         }
     }
 }
