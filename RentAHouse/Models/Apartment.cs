@@ -39,7 +39,6 @@ namespace RentAHouse.Models
         public DateTime EnterDate { get; set; }
         [DisplayName("Floor")]
         public int floor { get; set; }
-        public virtual ApartmentImage[] images { get; set; }
 
 
     }
