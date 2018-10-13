@@ -13,7 +13,7 @@
             sel.append($("<option>").attr('value', city.ID).text(city.cityName));
         });
 
-            $.get('/Apartment/createCSVs');
+            
      $("#suggestPriceButton").click(onSuggestPrice);
     });
 });

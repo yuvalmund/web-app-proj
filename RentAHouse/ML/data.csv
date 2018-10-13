@@ -1,7 +1,0 @@
-ID,avarageSalary,region,GraduatesPercents,roomsNumber,size,isRenovatetd,price,
-1,10000,3,85,1,1,False,1,
-3,18000,2,99,1,1,False,1,
-1,10000,3,85,4,100,False,4000,
-1,10000,3,85,4,120,True,4800,
-1,10000,3,85,4,120,False,4800,
-1,10000,3,85,4,120,False,4800,

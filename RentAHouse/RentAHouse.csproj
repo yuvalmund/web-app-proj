@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <Content Remove="wwwroot\images\intro.mp4" />
+    <Content Remove="wwwroot\js\JavaScript.js" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,9 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="ML\Data\ApartmentsData.csv">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="ML\Data\Model.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

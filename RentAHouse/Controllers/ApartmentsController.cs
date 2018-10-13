@@ -19,6 +19,8 @@ namespace RentAHouse.Controllers
     public class ApartmentsController : Controller
     {
         private readonly ApplicationDbContext _context;
+
+        // needed for the creation of the CSV files, to get the connection string to DB
         private IConfiguration Configuration;
 
         public ApartmentsController(ApplicationDbContext context, IConfiguration configuration)
@@ -121,6 +123,7 @@ namespace RentAHouse.Controllers
         [Authorize]
         public async Task<IActionResult> Create(string city, string street, int houseNumber, int roomsNumber, int size,int price,int cityTax,int BuildingTax,bool furnitureInculded,bool isRenovatetd,bool arePetsAllowed,bool isThereElivator,DateTime EnterDate,int floor)
         {
+            // creating new apartments by the data we have
             Apartment apartment = new Apartment();
             apartment.city = _context.City.Where(i => i.ID == Convert.ToInt32(city)).ToList()[0];
             apartment.street = street;
@@ -147,14 +150,21 @@ namespace RentAHouse.Controllers
                 await _context.SaveChangesAsync();
                 //return RedirectToAction(nameof(Index));
             }
+
+            // redirecting to the index
             return View("~/Views/Home/Index.cshtml");
         }
 
         [HttpPost]
         public async Task<string> GetApartmentsByOwner()
         {
+            // creating the CSV fot the click graph
+            createCSVs();
+
+            // getting the user id (owner ID)
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+            // getting all apartments by the user
             var queryApartments =
                   from currOwner in _context.ApartmentOwner
                   where currOwner.Id == userId
@@ -189,7 +199,6 @@ namespace RentAHouse.Controllers
         }
 
         // GET: Apartments/Edit/5
-        [Authorize]
         [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
@@ -244,7 +253,6 @@ namespace RentAHouse.Controllers
 
         // GET: Apartments/Delete/5
         [Authorize]
-        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -279,13 +287,17 @@ namespace RentAHouse.Controllers
             return _context.Apartment.Any(e => e.ID == id);
         }
 
+
+        [HttpGet]
         public void createCSVs()
         {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             string constr = this.Configuration.GetConnectionString("DefaultConnection");
 
             using (SqlConnection con = new SqlConnection(constr))
             {
-                using (SqlCommand cmd = new SqlCommand("SELECT count(apartmentID) click, date from dbo.ApartmentViews group by date"))
+                using (SqlCommand cmd = new SqlCommand("SELECT count(apartmentID) click, date from dbo.ApartmentViews vs, dbo.Apartment ap WHERE vs.apartmentID = ap.ID AND ap.ownerId = '" + userId + "' group by date"))
                 {
                     using (SqlDataAdapter sda = new SqlDataAdapter())
                     {
@@ -325,6 +337,34 @@ namespace RentAHouse.Controllers
                     }
                 }
             }
+        }
+
+        public string GetApartmentByCity()
+        {
+            var result = from ap in _context.Apartment
+                         join city in _context.City on ap.city.ID equals city.ID
+                         group new
+                         {
+                             ap.ID,
+                             city.cityName,
+                             ap.street,
+                             ap.houseNumber,
+                             ap.roomsNumber,
+                             ap.size,
+                             ap.price,
+                             ap.cityTax,
+                             ap.BuildingTax,
+                             ap.furnitureInculded,
+                             ap.isRenovatetd,
+                             ap.arePetsAllowed,
+                             ap.isThereElivator,
+                             ap.EnterDate,
+                             ap.floor
+                         }
+                         by ap.city.cityName into grouedAps
+                         select grouedAps;
+
+            return JsonConvert.SerializeObject(result);
         }
     }
 }

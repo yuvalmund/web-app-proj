@@ -18,7 +18,7 @@ namespace RentAHouse.Controllers
 {
     public class MLController : Controller
     {
-
+        // Needed for the creation of CSV - contains the connection string to the DB
         private IConfiguration Configuration;
 
         private readonly ApplicationDbContext _context;
@@ -32,22 +32,29 @@ namespace RentAHouse.Controllers
         [Authorize(Roles = "Admin")]
         public void createCSVFiles()
         {
-            // Create CSV for ML
+            // Get the connection string
             string constr = this.Configuration.GetConnectionString("DefaultConnection");
+
+            // Open an SQL Connection
             using (SqlConnection con = new SqlConnection(constr))
             {
+                // Define a query to recieve the data needed for the CSV files
                 using (SqlCommand cmd = new SqlCommand(
                     "SELECT ct.ID, ct.avarageSalary, ct.region, ct.GraduatesPercents,ap.roomsNumber, ap.size, ap.isThereElivator, ap.furnitureInculded, ap.isRenovatetd, ap.price FROM dbo.Apartment ap, dbo.City ct where ct.ID = ap.cityID"))
                 {
+                    // Connect to the Database
                     using (SqlDataAdapter sda = new SqlDataAdapter())
                     {
                         cmd.Connection = con;
                         sda.SelectCommand = cmd;
+
+                        // Create a data table
                         using (DataTable dt = new DataTable())
                         {
+                            // Fill the table with the results of the query
                             sda.Fill(dt);
 
-                            //Build the CSV file data as a Comma separated string.
+                            //ccreate two strings to be written to who CSV files: taining data and test data
                             string[] CSVs = new string[2];
                             CSVs[0] = string.Empty;
                             CSVs[1] = string.Empty;
@@ -69,10 +76,11 @@ namespace RentAHouse.Controllers
                             {
                                 // Randomly decide which CSV to add it to
                                 int nIndex = rnd.Next(0, 2);
-
+                                
+                                // Go throgh the rows
                                 foreach (DataColumn column in dt.Columns)
                                 {
-                                    //Add the Data rows.
+                                    //Add the Data column.
                                     CSVs[nIndex] += (int.Parse(row[column.ColumnName].ToString().Replace("False",  "0").Replace("True", "1"))).ToString() + ',';
                                 }
 
@@ -94,21 +102,18 @@ namespace RentAHouse.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<string> TrainModel()
         {
+            // Create the files with the training data and test data
             this.createCSVFiles();
-            try
-            {
-                PredictionModel<ML.ApartmentData, ML.AppartmentPricePrediction> model = await ML.ModelBuilder.Train();
 
-                return ML.ModelBuilder.Evaluate(model);
-            }
-            catch (Exception err)
-            {
-                var x = 1;
-                return "1";
-            }
+            // Build the model
+            PredictionModel<ML.ApartmentData, ML.AppartmentPricePrediction> model = await ML.ModelBuilder.Train();
+
+            // Evaluate the built model and return its metrics
+            return ML.ModelBuilder.Evaluate(model);
         }
 
         [HttpGet]
+        // gets appartment data and predicts a price
         public async Task<string> predict(int inCityID,
                               int inRoomsNumber,
                               int inSizeInMeters,
@@ -116,8 +121,10 @@ namespace RentAHouse.Controllers
                               bool inFurnitureInculded,
                               bool inIsRenovated)
         {
+            // Get the city in which the apartment is located
             Models.City currCity = _context.City.Where(c => c.ID == inCityID).First();
-  
+            
+            // create an ApartmentData object from the given parameters
             ML.ApartmentData newExample = new ML.ApartmentData
             {
                 cityID = inCityID,
@@ -131,8 +138,10 @@ namespace RentAHouse.Controllers
                 isRenovated = inIsRenovated
             };
 
+            //Read the model from the zip file
             var model = await PredictionModel.ReadAsync<ApartmentData, AppartmentPricePrediction>(ModelBuilder.MODEL_PATH);
 
+            // Make the prediction
             ML.AppartmentPricePrediction prediction = model.Predict(newExample);
 
             return ((int)prediction.price).ToString();
