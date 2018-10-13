@@ -18,7 +18,7 @@ function tableBuilder(apartment) {
 
 
 function onRegionSelected(region) {
-    $.get('/Apartments/GetCities', { region: region }, function (data) {
+    $.get('/Cities/GetCitiesBtCriterias', { region: region }, function (data) {
         var cityArray = JSON.parse(data);
 
         $("#selectCity").empty();

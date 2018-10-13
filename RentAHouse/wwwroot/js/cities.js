@@ -2,7 +2,7 @@
 
 $(document).ready(function () {
     $.ajax({
-        url: '/Cities/getDistrictEnum',
+        url: '/Districts/getDistrictEnum',
         type: "GET",
         success: function (response) {
             regions = JSON.parse(response);
@@ -10,31 +10,8 @@ $(document).ready(function () {
     });
     onSearch();
 });
-        //$.ajax({
-        //    url: "/Cities/GetCitiesBtCriterias",
-        //    data: {
-        //        "name": $("#selectCity").val(),
-        //        "minNumOfResidents": $("#numOfResidents").val(),
-        //        "region": $("#region").val()
-        //    },
-        //    type: "GET",
-        //}).done(function (data) {
-        //    var cities = JSON.parse(data);
-        //    cities.forEach(function (city) {
-        //        var addcities = "<tr><td>"
-        //            + city.cityName + "</td> <td>"
-        //            + city.GraduatesPercents + "</td> <td>"
-        //            + city.mayor + "</td> <td>"
-        //            + city.avarageSalary + "</td> <td>"
-        //            + city.numOfResidents + "</td> <td>"
-        //            + city.region + "</td> <td>"
-        //            + ap.cityTax + "</td> </tr>"
-        //        $("#tableBody").append(addCities);
-        //    })
-        //});
-    //});
-
-    function onSearch() {
+        
+ function onSearch() {
         $.ajax({
             url: '/Cities/GetCitiesBtCriterias',
             data: {

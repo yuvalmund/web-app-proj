@@ -28,11 +28,6 @@ namespace RentAHouse.Controllers
             return View(await _context.City.ToListAsync());
         }
 
-        public string getDistrictEnum()
-        {
-                return JsonConvert.SerializeObject(Enum.GetValues(typeof(District)), new Newtonsoft.Json.Converters.StringEnumConverter());
-        }
-
         [Authorize(Roles = "Admin")]
         public string GetCitiesBtCriterias(District region, string name, int minNumOfResidents)
         {
