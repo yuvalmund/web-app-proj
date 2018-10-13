@@ -155,6 +155,8 @@ namespace RentAHouse.Controllers
         [HttpPost]
         public async Task<string> GetApartmentsByOwner()
         {
+            createCSVs();
+
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var queryApartments =
@@ -293,13 +295,16 @@ namespace RentAHouse.Controllers
             ViewBag.Cities = citiesList; 
         }
 
+        [HttpGet]
         public void createCSVs()
         {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             string constr = this.Configuration.GetConnectionString("DefaultConnection");
 
             using (SqlConnection con = new SqlConnection(constr))
             {
-                using (SqlCommand cmd = new SqlCommand("SELECT count(apartmentID) click, date from dbo.ApartmentViews group by date"))
+                using (SqlCommand cmd = new SqlCommand("SELECT count(apartmentID) click, date from dbo.ApartmentViews vs, dbo.Apartment ap WHERE vs.apartmentID = ap.ID AND ap.ownerId = '" + userId + "' group by date"))
                 {
                     using (SqlDataAdapter sda = new SqlDataAdapter())
                     {
