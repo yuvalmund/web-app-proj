@@ -1,10 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -12,10 +9,7 @@ using RentAHouse.Data;
 using RentAHouse.Models;
 using Newtonsoft.Json;
 using System;
-using System.Web;
-using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
-using Newtonsoft.Json;
 
 namespace RentAHouse.Controllers
 {
@@ -34,6 +28,13 @@ namespace RentAHouse.Controllers
             var citiesList = new MultiSelectList(_context.City.Select(i => i), "ID", "cityName");
             ViewBag.Cities = citiesList;
 
+            return View(await _context.Apartment.ToListAsync());
+        }
+
+        // GET: Apartments
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Admin()
+        {
             return View(await _context.Apartment.ToListAsync());
         }
 
@@ -117,6 +118,7 @@ namespace RentAHouse.Controllers
         }
 
         // GET: Apartments/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -140,26 +142,6 @@ namespace RentAHouse.Controllers
         {
             return View();
         }
-       
-        // POST: Apartments/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //public async Task<IActionResult> Create([Bind("ID,city,street,houseNumber,roomsNumber,size,price,cityTax,BuildingTax,furnitureInculded,isRenovatetd,arePetsAllowed,isThereElivator,EnterDate,floor")] Apartment apartment)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-        //        List<ApartmentOwner> Owner = _context.ApartmentOwner.Where(i => i.Id == userId).ToList();
-        //        apartment.owner = Owner[0];
-        //        _context.Add(apartment);
-        //        await _context.SaveChangesAsync();
-        //        //return RedirectToAction(nameof(Index));
-        //    }
-        //    return View("~/Views/Home/Index.cshtml");
-        //}
-
 
         [HttpPost]
         [Authorize]
@@ -234,6 +216,7 @@ namespace RentAHouse.Controllers
 
         // GET: Apartments/Edit/5
         [Authorize]
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -286,6 +269,7 @@ namespace RentAHouse.Controllers
         }
 
         // GET: Apartments/Delete/5
+        [Authorize]
         [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
