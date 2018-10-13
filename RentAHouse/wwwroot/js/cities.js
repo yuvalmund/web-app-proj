@@ -32,7 +32,10 @@ $(document).ready(function () {
                         + city.mayor + "</td> <td>"
                         + city.avarageSalary + "</td> <td>"
                         + city.numOfResidents + "</td> <td>"
-                        + regions[city.region] + "</td> <td>";
+                        + regions[city.region] + "</td> <td>"
+                        + `<a href="Cities/Edit/${city.ID}">Edit</a> `
+                        + `<a href="Cities/Delete/${city.ID}">Delete</a>`
+                        + "</td> </tr>";
                     $("#tableBody").append(addcities);
                 })
             }

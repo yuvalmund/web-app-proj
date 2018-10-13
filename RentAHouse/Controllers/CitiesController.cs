@@ -149,7 +149,7 @@ namespace RentAHouse.Controllers
             {
                 return NotFound();
             }
-
+            ViewBag.attachedAppartmentsNumber = _context.Apartment.Where(app => app.city.ID == city.ID).Count();
             return View(city);
         }
 
@@ -160,6 +160,12 @@ namespace RentAHouse.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var city = await _context.City.FindAsync(id);
+
+            foreach (Apartment appartment in _context.Apartment.Where(app => app.city.ID == city.ID))
+            {
+                _context.Apartment.Remove(appartment);
+            }
+
             _context.City.Remove(city);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

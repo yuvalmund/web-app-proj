@@ -10,16 +10,21 @@ using RentAHouse.Models;
 using Newtonsoft.Json;
 using System;
 using System.Security.Claims;
+using System.Data.SqlClient;
+using System.Data;
+using Microsoft.Extensions.Configuration;
 
 namespace RentAHouse.Controllers
 {
     public class ApartmentsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private IConfiguration Configuration;
 
-        public ApartmentsController(ApplicationDbContext context)
+        public ApartmentsController(ApplicationDbContext context, IConfiguration configuration)
         {
             _context = context;
+            Configuration = configuration;
         }
 
         // GET: Apartments
@@ -286,6 +291,54 @@ namespace RentAHouse.Controllers
                 citiesList = new MultiSelectList(_context.City.Select(i => i.region == (District)region), "ID", "cityName");
             }
             ViewBag.Cities = citiesList; 
+        }
+
+        public void createCSVs()
+        {
+            string constr = this.Configuration.GetConnectionString("DefaultConnection");
+
+            using (SqlConnection con = new SqlConnection(constr))
+            {
+                using (SqlCommand cmd = new SqlCommand("SELECT count(apartmentID) click, date from dbo.ApartmentViews group by date"))
+                {
+                    using (SqlDataAdapter sda = new SqlDataAdapter())
+                    {
+                        cmd.Connection = con;
+                        sda.SelectCommand = cmd;
+                        using (DataTable dt = new DataTable())
+                        {
+                            sda.Fill(dt);
+
+                            //Build the CSV file data as a Comma separated string.
+                            string csv = string.Empty;
+
+                            foreach (DataColumn column in dt.Columns)
+                            {
+                                //Add the Header row for CSV file.
+                                csv += column.ColumnName + ',';
+                            }
+
+                            //Add new line.
+                            csv += "\r\n";
+
+                            foreach (DataRow row in dt.Rows)
+                            {
+                                foreach (DataColumn column in dt.Columns)
+                                {
+                                    //Add the Data rows.
+                                    csv += row[column.ColumnName].ToString().Replace(",", ";") + ',';
+                                }
+
+                                //Add new line.
+                                csv += "\r\n";
+                            }
+
+                            //Download the CSV file.
+                            System.IO.File.WriteAllText("wwwroot\\data\\graph.csv", csv);
+                        }
+                    }
+                }
+            }
         }
     }
 }
