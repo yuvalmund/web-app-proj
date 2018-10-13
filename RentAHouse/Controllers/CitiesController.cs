@@ -28,7 +28,6 @@ namespace RentAHouse.Controllers
             return View(await _context.City.ToListAsync());
         }
 
-        [Authorize(Roles = "Admin")]
         public string GetCitiesBtCriterias(District region, string name, int minNumOfResidents)
         {
             var cities = (_context.City.Where(city => (name == null || city.cityName.Contains(name))));
