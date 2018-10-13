@@ -26,6 +26,7 @@
 </head>
 <script>
     $(document).ready(function () {
+        // creating the appartments by owner id table
         $.ajax({
             url: "/../../../Apartments/GetApartmentsByOwner",
             method: "POST",
@@ -104,10 +105,12 @@
 </table>
 <div id="graph"></div>
 <script>
+    // creating the grafh of the clicks per day on my apartments
     var margin = { top: 30, right: 20, bottom: 30, left: 50 },
         width = 600 - margin.left - margin.right,
         height = 270 - margin.top - margin.bottom;
 
+    // formating the date
     var parseDate = d3.time.format("%d-%b-%y").parse;
 
     // Set the ranges
