@@ -45,7 +45,10 @@
                     + ap.isRenovatetd + "</td> <td>"
                     + ap.arePetsAllowed + "</td> <td>"
                     + ap.isThereElivator + "</td> <td>"
-                    + ap.floor + "</td> </tr>"
+                    + ap.floor + "</td> <td>"  
+                    + `<a href="/../../../Apartments/Edit/${ap.ID}">Edit</a>` + `</td> <td>`
+                    + `<a href="/../../../Apartments/Delete/${ap.ID}">Delete</a>` 
+                "</td> </tr>"
                 $("#tableBody").append(addap);
             })
         });
