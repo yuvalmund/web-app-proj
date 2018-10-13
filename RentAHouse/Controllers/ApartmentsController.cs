@@ -38,37 +38,6 @@ namespace RentAHouse.Controllers
             return View(await _context.Apartment.ToListAsync());
         }
 
-
-        [HttpGet]
-        public string GetCities(int region)
-        {
-            List<City> n;
-            if (region == (int)District.All)
-            {
-                n = _context.City.ToList();
-            }
-            else
-            {
-                District dis = (District)region;
-                n = _context.City.Where(i => i.region == dis).ToList();
-            }
-
-            var json = JsonConvert.SerializeObject(n);
-
-            return json;
-        }
-
-        public async Task<string> GetAllCites(int region)
-        {
-            List<City> n;
-
-            n = _context.City.ToList();
-
-            var json = JsonConvert.SerializeObject(n);
-
-            return json;
-        }
-
         [HttpGet]
         public string GetApartments(int cityId, int roomNumber, int minPrice, int maxPrice) {
 
