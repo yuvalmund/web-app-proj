@@ -29,6 +29,7 @@ namespace RentAHouse.Controllers
 
         public IActionResult About()
         {
+            // Create the CSV needed for the pie graph
             createCSVs();
 
             ViewData["Message"] = "Your application description page.";
