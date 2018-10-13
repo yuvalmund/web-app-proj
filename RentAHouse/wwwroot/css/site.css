@@ -44,3 +44,12 @@ video {
 footer {
     column-count: 2;
 }
+
+.logo {
+    width: 7%;
+    margin-right: 14px !important;
+}
+
+.myCanvas {
+    width: 100%;
+}
