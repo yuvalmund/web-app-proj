@@ -123,6 +123,7 @@ namespace RentAHouse.Controllers
         [Authorize]
         public async Task<IActionResult> Create(string city, string street, int houseNumber, int roomsNumber, int size,int price,int cityTax,int BuildingTax,bool furnitureInculded,bool isRenovatetd,bool arePetsAllowed,bool isThereElivator,DateTime EnterDate,int floor)
         {
+            // creating new apartments by the data we have
             Apartment apartment = new Apartment();
             apartment.city = _context.City.Where(i => i.ID == Convert.ToInt32(city)).ToList()[0];
             apartment.street = street;
@@ -149,16 +150,21 @@ namespace RentAHouse.Controllers
                 await _context.SaveChangesAsync();
                 //return RedirectToAction(nameof(Index));
             }
+
+            // redirecting to the index
             return View("~/Views/Home/Index.cshtml");
         }
 
         [HttpPost]
         public async Task<string> GetApartmentsByOwner()
         {
+            // creating the CSV fot the click graph
             createCSVs();
 
+            // getting the user id (owner ID)
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+            // getting all apartments by the user
             var queryApartments =
                   from currOwner in _context.ApartmentOwner
                   where currOwner.Id == userId
