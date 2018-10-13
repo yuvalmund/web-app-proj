@@ -65,6 +65,10 @@ function onSearch() {
 }
 
 function onSeeMore(id) {
+
+    // Counts clicks as info for owner
+    $.post('/ApartmentViews/addClick', { apartment: id }, function (data) { });
+
     var apartment = apartments.find(a => a.ID == id);
 
     loadMap("{0} {1} {2}".format([apartment.street,
@@ -89,8 +93,8 @@ function onSeeMore(id) {
     $("#modelOwnerRate").text("Rate: " + apartment.rate + "/5");
     $("#modalContact").data("OwnerEmail", apartment.Email);
 
-    // Counts clicks as info for owner
-    $.post('/ApartmentViews/addClick', { apartment: id }, function (data) {});
+    
+   
 }
 
 
