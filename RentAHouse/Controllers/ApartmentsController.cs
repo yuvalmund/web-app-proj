@@ -19,6 +19,8 @@ namespace RentAHouse.Controllers
     public class ApartmentsController : Controller
     {
         private readonly ApplicationDbContext _context;
+
+        // needed for the creation of the CSV files, to get the connection string to DB
         private IConfiguration Configuration;
 
         public ApartmentsController(ApplicationDbContext context, IConfiguration configuration)
@@ -192,7 +194,6 @@ namespace RentAHouse.Controllers
 
         // GET: Apartments/Edit/5
         [Authorize]
-        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -245,7 +246,6 @@ namespace RentAHouse.Controllers
         }
 
         // GET: Apartments/Delete/5
-        [Authorize]
         [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {

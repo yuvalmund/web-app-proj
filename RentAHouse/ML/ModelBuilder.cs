@@ -17,14 +17,6 @@ namespace RentAHouse.ML
         public const string MODEL_PATH = "./ML/Data/Model.zip";
         public const string TEST_DATA_PATH = "./ML/Data/testData.csv";
 
-        /*
-         * EXPLENATION:
-         * The method Train is an async method, so the application continues
-         * to respond to the UI. For instance, we can close the application if
-         * you don't want to wait for it to finish.
-         * Therefore, it returns a task.
-        */
-
         public static async Task<PredictionModel<ApartmentData, AppartmentPricePrediction>> Train()
         {
             // Create a pipeline to load the apartments data

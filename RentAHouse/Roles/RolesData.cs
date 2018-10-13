@@ -16,6 +16,7 @@ namespace RentAHouse.Roles
 
         public static async Task SeedRoles(RoleManager<IdentityRole> roleManager)
         {
+            // If the roles do not yet exsist in the DB
             foreach (var role in roles)
             {
                 if (!await roleManager.RoleExistsAsync(role))

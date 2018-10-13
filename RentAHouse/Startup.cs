@@ -43,7 +43,7 @@ namespace RentAHouse
                     Configuration.GetConnectionString("DefaultConnection")));
              //services.AddDefaultIdentity<IdentityUser>().AddRoles<IdentityRole>()
 
-
+            // The .AddRoleManager enables the authorization by roles
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddRoleManager<RoleManager<IdentityRole>>()
                 .AddUserManager<UserManager<IdentityUser>>()
@@ -75,6 +75,7 @@ namespace RentAHouse
 
             app.UseAuthentication();
 
+            // Create all roles in case of new db
             Roles.RolesData.SeedRoles(roleManager).Wait();
 
             app.UseMvc(routes =>

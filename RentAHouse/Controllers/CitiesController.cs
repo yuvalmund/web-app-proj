@@ -30,9 +30,10 @@ namespace RentAHouse.Controllers
 
         public string GetCitiesBtCriterias(District region, string name, int minNumOfResidents)
         {
-            var cities = (_context.City.Where(city => (name == null || city.cityName.Contains(name))));
-            cities = cities.Where(city => (region == District.All || city.region == region));
-            cities = cities.Where(city => (city.numOfResidents >= minNumOfResidents));
+            // Get all the cities that matches the given criterias, if givem
+            var cities = (_context.City.Where(city => (name == null || city.cityName.Contains(name)) &&
+                                                      (region == District.All || city.region == region) &&
+                                                      (city.numOfResidents >= minNumOfResidents)));
 
             return JsonConvert.SerializeObject(cities.ToList<City>());
         }
@@ -160,6 +161,7 @@ namespace RentAHouse.Controllers
         {
             var city = await _context.City.FindAsync(id);
 
+            // Delete all of the apartments that are located in the deleted city
             foreach (Apartment appartment in _context.Apartment.Where(app => app.city.ID == city.ID))
             {
                 _context.Apartment.Remove(appartment);
