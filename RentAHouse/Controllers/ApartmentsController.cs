@@ -345,5 +345,33 @@ namespace RentAHouse.Controllers
                 }
             }
         }
+
+        public string GetApartmentByCity()
+        {
+            var result = from ap in _context.Apartment
+                         join city in _context.City on ap.city.ID equals city.ID
+                         group new
+                         {
+                             ap.ID,
+                             city.cityName,
+                             ap.street,
+                             ap.houseNumber,
+                             ap.roomsNumber,
+                             ap.size,
+                             ap.price,
+                             ap.cityTax,
+                             ap.BuildingTax,
+                             ap.furnitureInculded,
+                             ap.isRenovatetd,
+                             ap.arePetsAllowed,
+                             ap.isThereElivator,
+                             ap.EnterDate,
+                             ap.floor
+                         }
+                         by ap.city.cityName into grouedAps
+                         select grouedAps;
+
+            return JsonConvert.SerializeObject(result);
+        }
     }
 }
