@@ -144,7 +144,7 @@
         .text("Clicks per day");
 
     // Get the data
-    d3.csv("../../../../data/graph.csv", function (error, data) {
+    d3.csv("/data/graph.csv", function (error, data) {
         data.forEach(function (d) {
             da = new Date(d.date)
             spl = da.toString().split(" ")
