@@ -14,7 +14,6 @@ namespace RentAHouse.Data
         {
         }
         public DbSet<RentAHouse.Models.Apartment> Apartment { get; set; }
-        public DbSet<RentAHouse.Models.ApartmentImage> ApartmentImage { get; set; }
         public DbSet<RentAHouse.Models.ApartmentOwner> ApartmentOwner { get; set; }
         public DbSet<RentAHouse.Models.ApartmentViews> ApartmentViews { get; set; }
         public DbSet<RentAHouse.Models.City> City { get; set; }

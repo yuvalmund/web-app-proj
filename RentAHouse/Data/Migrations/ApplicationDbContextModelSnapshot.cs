@@ -141,11 +141,9 @@ namespace RentAHouse.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.Property<string>("LoginProvider")
-                        .HasMaxLength(128);
+                    b.Property<string>("LoginProvider");
 
-                    b.Property<string>("ProviderKey")
-                        .HasMaxLength(128);
+                    b.Property<string>("ProviderKey");
 
                     b.Property<string>("ProviderDisplayName");
 
@@ -176,11 +174,9 @@ namespace RentAHouse.Data.Migrations
                 {
                     b.Property<string>("UserId");
 
-                    b.Property<string>("LoginProvider")
-                        .HasMaxLength(128);
+                    b.Property<string>("LoginProvider");
 
-                    b.Property<string>("Name")
-                        .HasMaxLength(128);
+                    b.Property<string>("Name");
 
                     b.Property<string>("Value");
 
@@ -232,23 +228,6 @@ namespace RentAHouse.Data.Migrations
                     b.HasIndex("ownerId");
 
                     b.ToTable("Apartment");
-                });
-
-            modelBuilder.Entity("RentAHouse.Models.ApartmentImage", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("apartmentID");
-
-                    b.Property<string>("imageFileName");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("apartmentID");
-
-                    b.ToTable("ApartmentImage");
                 });
 
             modelBuilder.Entity("RentAHouse.Models.ApartmentViews", b =>
@@ -360,13 +339,6 @@ namespace RentAHouse.Data.Migrations
                     b.HasOne("RentAHouse.Models.ApartmentOwner", "owner")
                         .WithMany("apartments")
                         .HasForeignKey("ownerId");
-                });
-
-            modelBuilder.Entity("RentAHouse.Models.ApartmentImage", b =>
-                {
-                    b.HasOne("RentAHouse.Models.Apartment", "apartment")
-                        .WithMany("images")
-                        .HasForeignKey("apartmentID");
                 });
 
             modelBuilder.Entity("RentAHouse.Models.ApartmentViews", b =>
