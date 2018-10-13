@@ -5,8 +5,12 @@
     ViewData["Title"] = "Index";
 }
 
-<h2 class="title">Search for your next house</h2>
+@*  This is the first page the user sees,
+    We configured it it Startup.cs file on "Configure" function
+    All javascript code is in apartmentView.js file
+*@
 
+<h2 class="title">Search for your next house</h2>
 
 <form>
     <div class="form-group">
@@ -58,9 +62,12 @@
     <tbody id="tableBody"></tbody>
 </table>
 
+@*
+    This modal displays information about the selected apartment
+    Click on 'See more' button triggers the modal to open - we configue it in 'tableBuilder' function
+    The data in the modal fills in 'onSeeMore' function
+*@
 
-
-<!-- Modal -->
 <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -69,6 +76,8 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
+                @*The relevant function is in map.js file
+                It looks for id="map" element and adds bing map*@
                 <div id="map" style="width: 97%;height: 200px;position: sticky;"></div>
             </div>
             <div class="modal-body">
@@ -155,6 +164,11 @@
     </div>
 </div>
 
+@*
+    This modal displays compose email form
+    Click on 'Contact owner' button (on apartment modal) triggers the modal to open
+    All relevant functions are in mail.js file
+*@
 <div class="modal fade" id="compose-modal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">

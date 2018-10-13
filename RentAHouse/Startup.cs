@@ -41,7 +41,6 @@ namespace RentAHouse
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-             //services.AddDefaultIdentity<IdentityUser>().AddRoles<IdentityRole>()
 
 
             services.AddIdentity<IdentityUser, IdentityRole>()
@@ -82,7 +81,7 @@ namespace RentAHouse
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Apartments}/{action=Index}/{id?}");
+                    template: "{controller=Apartments}/{action=Index}");
             });
         }
 
