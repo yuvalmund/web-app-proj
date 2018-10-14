@@ -152,15 +152,13 @@ namespace RentAHouse.Controllers
         }
 
         [HttpPost]
-        public async void addClick(int apartment)
+        public async Task addClick(int apartment)
         {
             ApartmentViews view = new ApartmentViews();
             view.apartment = _context.Apartment.Where(i => i.ID == apartment).ToList()[0];
             view.date = DateTime.Today;
 
-            Create(view);
-            //_context.Add(view);
-            //await _context.SaveChangesAsync();
+            await Create(view);
         }
     }
 }
