@@ -333,7 +333,7 @@ namespace RentAHouse.Controllers
                             }
 
                             //Download the CSV file.
-                            System.IO.File.WriteAllText("wwwroot\\data\\graph.csv", csv);
+                            System.IO.File.WriteAllText("wwwroot\\data\\graphowner.csv", csv);
                         }
                     }
                 }
