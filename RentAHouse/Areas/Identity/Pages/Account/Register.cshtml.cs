@@ -80,15 +80,17 @@ namespace RentAHouse.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
+                // Create a new Apartment Owner
                 var user = new Models.ApartmentOwner { UserName = Input.userName,
                                                        Email = Input.Email,
                                                        firstName = Input.FirstName,
                                                        lastName = Input.LastName };
+                // Register the owner as a new user
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 
                 if (result.Succeeded)
                 {
-
+                    // Add the role "member" to the user
                     await _userManager.AddToRoleAsync(user, "Member");
 
                     _logger.LogInformation("User created a new account with password.");

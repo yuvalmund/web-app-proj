@@ -5,6 +5,7 @@ using System.Text;
 
 namespace RentAHouse.ML
 {
+    // Defines the data model, that is read from the CSV files
     public class ApartmentData
     {
         [Column("0")]

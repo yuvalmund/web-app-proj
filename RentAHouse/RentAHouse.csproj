@@ -6,7 +6,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\**" />
+    <Content Remove="Migrations\**" />
+    <EmbeddedResource Remove="Migrations\**" />
+    <None Remove="Migrations\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="wwwroot\images\intro.mp4" />
+    <Content Remove="wwwroot\js\JavaScript.js" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,9 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="ML\Data\ApartmentsData.csv">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="ML\Data\Model.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -34,8 +39,6 @@
 
   <ItemGroup>
     <Folder Include="Areas\Identity\Services\" />
-    <Folder Include="Data\Migrations\" />
-    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

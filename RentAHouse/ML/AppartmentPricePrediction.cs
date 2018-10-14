@@ -5,6 +5,7 @@ using System.Text;
 
 namespace RentAHouse.ML
 {
+    // Defines the prediction data model
     public class AppartmentPricePrediction
     {
         //[ColumnName("price")]

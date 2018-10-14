@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using RentAHouse.Data;
 using RentAHouse.Models;
 
@@ -27,7 +28,17 @@ namespace RentAHouse.Controllers
             return View(await _context.City.ToListAsync());
         }
 
+        public string GetCitiesBtCriterias(District region, string name, int minNumOfResidents)
+        {
+            // Get all the cities that matches the given criterias, if givem
+            var cities = (_context.City.Where(city => (name == null || city.cityName.Contains(name)) &&
+                                                      (region == District.All || city.region == region) &&
+                                                      (city.numOfResidents >= minNumOfResidents)));
 
+            return JsonConvert.SerializeObject(cities.ToList<City>());
+        }
+
+        // GET: Cities/Details/5
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Details(string name)
         {
@@ -138,7 +149,7 @@ namespace RentAHouse.Controllers
             {
                 return NotFound();
             }
-
+            ViewBag.attachedAppartmentsNumber = _context.Apartment.Where(app => app.city.ID == city.ID).Count();
             return View(city);
         }
 
@@ -149,6 +160,13 @@ namespace RentAHouse.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var city = await _context.City.FindAsync(id);
+
+            // Delete all of the apartments that are located in the deleted city
+            foreach (Apartment appartment in _context.Apartment.Where(app => app.city.ID == city.ID))
+            {
+                _context.Apartment.Remove(appartment);
+            }
+
             _context.City.Remove(city);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

@@ -4,105 +4,15 @@
     ViewData["Title"] = "Index";
 }
 
-<h2>Index</h2>
+<h2>All Apartments</h2>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.street)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.houseNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.roomsNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.size)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.cityTax)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BuildingTax)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.furnitureInculded)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.isRenovatetd)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.arePetsAllowed)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.isThereElivator)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EnterDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.floor)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.street)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.houseNumber)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.roomsNumber)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.size)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.price)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.cityTax)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.BuildingTax)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.furnitureInculded)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.isRenovatetd)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.arePetsAllowed)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.isThereElivator)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.EnterDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.floor)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<section id="listBycities"></section>
+
+@section Scripts{
+    <script type="text/javascript" src="https://cdn.emailjs.com/sdk/2.2.4/email.min.js"></script>
+    <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?key=AlNQea4USaYJiJV4kPGxdLToVtMi7j8YKvoc3CfzjJN0ZVDkyHT809I5wOvQeMdE'></script>
+    <script src="~/js//apartmentAdmin.js"></script>
+}

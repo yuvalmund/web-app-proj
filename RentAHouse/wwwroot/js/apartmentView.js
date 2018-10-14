@@ -1,12 +1,15 @@
 ﻿var apartments;
 
+//Build result list for search
 function tableBuilder(apartment) {
 
     var tb = "<td>{0}</td><td>{1}</td>" +
         "<td>{2}</td><td>{3}</td><td>{4}</td>" +
         "<td>{5}</td>" +
         "<td><input id='seeMoreButton" + apartment.ID +
-        "' type='button' class='btn btn - success btn - lg' value='See more' data-toggle='modal' data-target='#modal' onclick='onSeeMore(" + apartment.ID + ")'/></td>";
+        "' type='button' class='btn'" +
+        " value='See more' data-toggle='modal' data-target='#modal'" +
+        " onclick = 'onSeeMore(" + apartment.ID + ")' /></td > ";
 
     return tb.format([apartment.street,
     apartment.houseNumber,
@@ -16,9 +19,9 @@ function tableBuilder(apartment) {
     apartment.price]);
 }
 
-
+//Update cities list by chosen region
 function onRegionSelected(region) {
-    $.get('/Apartments/GetCities', { region: region }, function (data) {
+    $.get('/Cities/GetCitiesBtCriterias', { region: region }, function (data) {
         var cityArray = JSON.parse(data);
 
         $("#selectCity").empty();
@@ -30,6 +33,7 @@ function onRegionSelected(region) {
     });
 }
 
+//Search apartments by parameters and update the result list
 function onSearch() {
     $.ajax({
         url: '/Apartments/GetApartments',
@@ -51,22 +55,26 @@ function onSearch() {
             $("#tableBody").empty();
 
             apartments.forEach(function (apartment) {
-                //TODO - add all wanted parameters
                 row = document.createElement("TR");
                 row.innerHTML = tableBuilder(apartment);
                 $("#tableBody").append(row);
             });
             $("#apartmentsTable").css('display', apartments.length ? '' : 'none');
-        },
-        error: function (xhr) {
-            //TODO - needed?
         }
     });
 }
 
+//Fill apartment information modal with data
+//Add click to clicks-counter table in db
 function onSeeMore(id) {
+
+    // Counts clicks as info for owner
+    $.post('/ApartmentViews/addClick', { apartment: id }, function (data) { });
+
     var apartment = apartments.find(a => a.ID == id);
 
+    //This function is in map.js file
+    //Looking for the accurate address and display on map
     loadMap("{0} {1} {2}".format([apartment.street,
                                         apartment.houseNumber,
                                         apartment.cityName]));
@@ -89,12 +97,13 @@ function onSeeMore(id) {
     $("#modelOwnerRate").text("Rate: " + apartment.rate + "/5");
     $("#modalContact").data("OwnerEmail", apartment.Email);
 
-    // Counts clicks as info for owner
-    $.post('/ApartmentViews/addClick', { apartment: id }, function (data) {});
+    
+   
 }
 
 
-// Makes life easier for tableBuilder function
+// Makes life easier for formating strings:
+// with format function you can send parameters to locations in the string
 String.prototype.format = function (args) {
     var str = this;
     return str.replace(String.prototype.format.regex, function (item) {

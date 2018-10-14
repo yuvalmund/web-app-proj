@@ -4,16 +4,26 @@
     ViewData["Title"] = "Index";
 }
 
-<h2>Index</h2>
+<h2>All Cities</h2>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<form asp-action="Details">
-    <input type="text" name="name" placeholder="City name" />
-    <input type="submit" class="btn" value="Search"/>
+<form>
+    <div class="form-group">
+        <label for="cityName">city name contains:</label>
+        <input id="selectCity" type="search" class="form-control"></input>
+    </div>
+    <div class="form-group">
+        <label for="numOfResidents">Minimal amount of residents?</label>
+        <input type="number" min="1" class="form-control" id="numOfResidents">
+    </div>
+    <div class="form-group">
+        <label for="region">Region</label>
+        <select id="region" asp-items="@Html.GetEnumSelectList<District>()" class="form-control"></select>
+    </div>
+    <input type="button" id="search" class="btn btn-success btn-lg" onclick="onSearch()" value="Search" />
 </form>
-
 <table class="table">
     <thead>
         <tr>
@@ -38,32 +48,14 @@
             <th></th>
         </tr>
     </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.cityName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.GraduatesPercents)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.mayor)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.avarageSalary)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.numOfResidents)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.region)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-            </td>
-        </tr>
-}
+    <tbody id="tableBody">
     </tbody>
 </table>
+
+
+@* scripts *@
+@section Scripts{
+    <script type="text/javascript" src="https://cdn.emailjs.com/sdk/2.2.4/email.min.js"></script>
+    <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?key=AlNQea4USaYJiJV4kPGxdLToVtMi7j8YKvoc3CfzjJN0ZVDkyHT809I5wOvQeMdE'></script>
+    <script src="~/js//cities.js"></script>
+}

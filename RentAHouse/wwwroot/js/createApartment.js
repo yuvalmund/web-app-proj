@@ -1,5 +1,9 @@
 ﻿$(document).ready(function () {
-    $.post('/Apartments/GetAllCites', function (data, status) {
+    $.post('/Cities/GetCitiesBtCriterias',
+        {
+            region: 0
+        },
+        function (data, status) {
         var cityArray = JSON.parse(data);
 
         $("#selectCity").empty();
@@ -9,7 +13,8 @@
             sel.append($("<option>").attr('value', city.ID).text(city.cityName));
         });
 
-        $("#suggestPriceButton").click(onSuggestPrice);
+            
+     $("#suggestPriceButton").click(onSuggestPrice);
     });
 });
 

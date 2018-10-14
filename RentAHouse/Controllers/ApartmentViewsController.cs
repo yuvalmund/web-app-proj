@@ -11,7 +11,6 @@ using RentAHouse.Models;
 
 namespace RentAHouse.Controllers
 {
-    [Authorize]
     public class ApartmentViewsController : Controller
     {
         private readonly ApplicationDbContext _context;
