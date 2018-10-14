@@ -45,6 +45,7 @@ namespace RentAHouse.Controllers
             return View(await _context.Apartment.ToListAsync());
         }
 
+        //Query apartments via Linq and filter by minimum price, maximum price and room number
         [HttpGet]
         public string GetApartments(int cityId, int roomNumber, int minPrice, int maxPrice) {
 
