@@ -90,12 +90,30 @@
                 <input type="button" id="suggestPriceButton" value="Suggest Price" class="btn btn-default" />
                 <span asp-validation-for="price" class="text-danger"></span>
             </div>
-            @*<input type="submit" value="Create" data-toggle='modal' data-target='#shareModal' class="btn btn-default" />*@
-            <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Create" data-toggle='modal' data-target='#shareModal' class="btn btn-default" />
             <div>
-                
+
             </div>
         </form>
+    </div>
+</div>
+
+<h2 id="finishMessage" class="hidden">Completed!</h2>
+
+<div class="modal fade" id="shareModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Let your friends know about it!</h4>
+            </div>
+            <div class="modal-footer">
+                <a href="https://twitter.com/intent/tweet?button_hashtag=RentAHouse&ref_src=twsrc%5Etfw" class="twitter-hashtag-button" data-show-count="false">Tweet #RentAHouse</a>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
     </div>
 </div>
 
