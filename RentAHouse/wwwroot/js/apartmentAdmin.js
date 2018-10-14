@@ -36,7 +36,7 @@
                         `<td> ${ap.isRenovatetd}</td >` +
                         `<td> ${ap.arePetsAllowed}</td >` +
                         `<td> ${ap.isThereElivator}</td >` +
-                        `<td> ${ap.EnterDate.split(":")[0]}</td >` +
+                        `<td> ${ap.EnterDate.split(" ")[0]}</td >` +
                         `<td> ${ap.floor}</td >` +
                         `<td>` +
                         `<a href="/Apartments/Details/${ap.ID}">Details</a> |` +
