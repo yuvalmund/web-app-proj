@@ -1,4 +1,5 @@
-﻿$("#composeForm").submit(function (e) {
+﻿//Sends the message the user typed in modal
+$("#composeForm").submit(function (e) {
     e.preventDefault();
     sendMessage($("#modalContact").data().OwnerEmail,
                 $("#composeReplyEmail").val(),
@@ -7,6 +8,16 @@
     composeTidy()
 });
 
+// Cleans compse form modal
+function composeTidy() {
+    $('#compose-modal').modal('hide');
+
+    $('#composeReplyEmail').val('');
+    $('#composeSubject').val('');
+    $('#composeMessage').val('');
+}
+
+//User rate us from footer
 function footerMail(message){
     sendMessage("ophir.dobkin@gmail.com", "", "You have a new opinion", message);
 }
@@ -24,11 +35,3 @@ function sendMessage(mailTo, mailReplay, subject, message) {
     };
     emailjs.send(service_id, template_id, template_params);
 };
-
-function composeTidy() {
-    $('#compose-modal').modal('hide');
-
-    $('#composeReplyEmail').val('');
-    $('#composeSubject').val('');
-    $('#composeMessage').val('');
-}

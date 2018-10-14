@@ -31,7 +31,3 @@ ctx.fillStyle = "#F2F2F2";
 ctx.arc(105, 75, 3, 0, 2 * Math.PI);
 ctx.fill();
 ctx.closePath();
-
-//Text on the Right
-//ctx.font = "20px Veranda";
-//ctx.fillText("RentAHouse", 130, 60);
