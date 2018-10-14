@@ -39,9 +39,9 @@
                         `<td> ${ap.EnterDate.split(" ")[0]}</td >` +
                         `<td> ${ap.floor}</td >` +
                         `<td>` +
-                        `<a href="/Apartments/Details/${ap.ID}">Details</a> |` +
-                        `<a href="/Apartments/Edit/${ap.ID}">Edit</a> |` +
-                        `<a href="/Apartments/Delete/${ap.ID}">Delete</a>` +
+                        `<a href="/Apartments/Details?id=${ap.ID}">Details</a> |` +
+                        `<a href="/Apartments/Edit?id=${ap.ID}">Edit</a> |` +
+                        `<a href="/Apartments/Delete?id=${ap.ID}">Delete</a>` +
                         `</td>`
                         "</tr>";
                 }

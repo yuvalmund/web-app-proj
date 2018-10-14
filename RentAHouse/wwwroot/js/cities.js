@@ -33,8 +33,8 @@ $(document).ready(function () {
                         + city.avarageSalary + "</td> <td>"
                         + city.numOfResidents + "</td> <td>"
                         + regions[city.region] + "</td> <td>"
-                        + `<a href="Cities/Edit/${city.ID}">Edit</a> `
-                        + `<a href="Cities/Delete/${city.ID}">Delete</a>`
+                        + `<a href="Cities/Edit?id=${city.ID}">Edit</a> `
+                        + `<a href="Cities/Delete?id=${city.ID}">Delete</a>`
                         + "</td> </tr>";
                     $("#tableBody").append(addcities);
                 })
