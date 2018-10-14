@@ -46,7 +46,7 @@ form.submit(function (e) {
         e.preventDefault();
         this.classList.add("hidden");
         $("#finishMessage").removeClass("hidden");
-        $("#shareModal").('toggle');
+        $("#shareModal").modal('toggle');
     }
 });
 
