@@ -67,6 +67,10 @@ function onSearch() {
 //Fill apartment information modal with data
 //Add click to clicks-counter table in db
 function onSeeMore(id) {
+
+    // Counts clicks as info for owner
+    $.post('/ApartmentViews/addClick', { apartment: id }, function (data) { });
+
     var apartment = apartments.find(a => a.ID == id);
 
     //This function is in map.js file
@@ -93,8 +97,8 @@ function onSeeMore(id) {
     $("#modelOwnerRate").text("Rate: " + apartment.rate + "/5");
     $("#modalContact").data("OwnerEmail", apartment.Email);
 
-    // Counts clicks as info for owner
-    $.post('/ApartmentViews/addClick', { apartment: id }, function (data) {});
+    
+   
 }
 
 
