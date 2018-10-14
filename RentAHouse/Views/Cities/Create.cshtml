@@ -14,32 +14,32 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="cityName" class="control-label"></label>
-                <input asp-for="cityName" class="form-control" />
+                <input asp-for="cityName" class="form-control" required/>
                 <span asp-validation-for="cityName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="GraduatesPercents" class="control-label"></label>
-                <input asp-for="GraduatesPercents" class="form-control" />
+                <input asp-for="GraduatesPercents" min="0" max="100" class="form-control" required/>
                 <span asp-validation-for="GraduatesPercents" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="mayor" class="control-label"></label>
-                <input asp-for="mayor" class="form-control" />
+                <input asp-for="mayor" class="form-control" required/>
                 <span asp-validation-for="mayor" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="avarageSalary" class="control-label"></label>
-                <input asp-for="avarageSalary" class="form-control" />
+                <input asp-for="avarageSalary" class="form-control" min="1" required/>
                 <span asp-validation-for="avarageSalary" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="numOfResidents" class="control-label"></label>
-                <input asp-for="numOfResidents" class="form-control" />
+                <input asp-for="numOfResidents" class="form-control" min="1" required/>
                 <span asp-validation-for="numOfResidents" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="region" class="control-label"></label>
-                <select asp-for="region"  asp-items="@Html.GetEnumSelectList<District>()" class="form-control"></select>
+                <select asp-for="region" asp-items="@Html.GetEnumSelectList<District>()" class="form-control" required min="1"></select>
                 <span asp-validation-for="region" class="text-danger"></span>
             </div>
             <div class="form-group">

@@ -160,16 +160,22 @@ namespace RentAHouse.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var city = await _context.City.FindAsync(id);
-
-            // Delete all of the apartments that are located in the deleted city
-            foreach (Apartment appartment in _context.Apartment.Where(app => app.city.ID == city.ID))
+            if (city != null)
             {
-                _context.Apartment.Remove(appartment);
-            }
+                // Delete all of the apartments that are located in the deleted city
+                foreach (Apartment appartment in _context.Apartment.Where(app => app.city.ID == city.ID))
+                {
+                    _context.Apartment.Remove(appartment);
+                }
 
-            _context.City.Remove(city);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+                _context.City.Remove(city);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                return NotFound();
+            }
         }
 
         private bool CityExists(int id)

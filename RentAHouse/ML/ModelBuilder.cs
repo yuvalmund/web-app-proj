@@ -57,16 +57,7 @@ namespace RentAHouse.ML
             };
 
             // Train the model according to the information in the pipeline
-            PredictionModel<ApartmentData, AppartmentPricePrediction> model = null;
-
-            try
-            {
-                model = pipeline.Train<ApartmentData, AppartmentPricePrediction>();
-            }
-            catch (Exception err)
-            {
-                var x = 1;
-            }
+            PredictionModel<ApartmentData, AppartmentPricePrediction> model = pipeline.Train<ApartmentData, AppartmentPricePrediction>();
 
             // Save the model to a file.
             // The method is async so the 'await' clause  tells it not to continue

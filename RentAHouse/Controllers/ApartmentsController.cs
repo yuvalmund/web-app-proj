@@ -127,33 +127,39 @@ namespace RentAHouse.Controllers
             // creating new apartments by the data we have
             Apartment apartment = new Apartment();
             apartment.city = _context.City.Where(i => i.ID == Convert.ToInt32(city)).ToList()[0];
-            apartment.street = street;
-            apartment.houseNumber = houseNumber;
-            apartment.roomsNumber = roomsNumber;
-            apartment.size = size;
-            apartment.price = price;
-            apartment.cityTax = cityTax;
-            apartment.BuildingTax = BuildingTax;
-            apartment.furnitureInculded = furnitureInculded;
-            apartment.isRenovatetd = isRenovatetd;
-            apartment.arePetsAllowed = arePetsAllowed;
-            apartment.isThereElivator = isThereElivator;
-            apartment.EnterDate = EnterDate;
-            apartment.floor = floor;
-
-            if (ModelState.IsValid)
+            if (apartment.city != null)
             {
-                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                apartment.street = street;
+                apartment.houseNumber = houseNumber;
+                apartment.roomsNumber = roomsNumber;
+                apartment.size = size;
+                apartment.price = price;
+                apartment.cityTax = cityTax;
+                apartment.BuildingTax = BuildingTax;
+                apartment.furnitureInculded = furnitureInculded;
+                apartment.isRenovatetd = isRenovatetd;
+                apartment.arePetsAllowed = arePetsAllowed;
+                apartment.isThereElivator = isThereElivator;
+                apartment.EnterDate = EnterDate;
+                apartment.floor = floor;
 
-                List<ApartmentOwner> Owner = _context.ApartmentOwner.Where(i => i.Id == userId).ToList();
-                apartment.owner = Owner[0];
-                _context.Add(apartment);
-                await _context.SaveChangesAsync();
-                //return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                    List<ApartmentOwner> Owner = _context.ApartmentOwner.Where(i => i.Id == userId).ToList();
+                    apartment.owner = Owner[0];
+                    _context.Add(apartment);
+                    await _context.SaveChangesAsync();
+                    //return RedirectToAction(nameof(Index));
+                }
+
+                // redirecting to the index
+                return View("~/Views/Home/Index.cshtml");
             }
-
-            // redirecting to the index
-            return View("~/Views/Home/Index.cshtml");
+            else {
+                return NotFound();
+            }
         }
 
         [HttpPost]
@@ -278,9 +284,17 @@ namespace RentAHouse.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var apartment = await _context.Apartment.FindAsync(id);
-            _context.Apartment.Remove(apartment);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            if (apartment != null)
+            {
+                _context.Apartment.Remove(apartment);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            else {
+                return NotFound();
+            }
+           
         }
 
         private bool ApartmentExists(int id)
