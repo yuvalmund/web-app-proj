@@ -23,6 +23,7 @@ var label = d3.arc()
     .innerRadius(radius - 40);
 
 // getting the data
+// the csv is created in HomeConroller.cs
 d3.csv("../../../../data/graphPie.csv", function (d) {
     d.count = +d.count;
     return d;
